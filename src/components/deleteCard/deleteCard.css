@@ -1,0 +1,34 @@
+/* Card */
+.delete-card {
+  /* width: 18rem; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+.delete-card > img {
+  max-width: 100%;
+  object-fit: cover;
+  border: 1px solid #b7b7b7;
+  transition: all 0.3s ease-in-out;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.delete-card > img:hover {
+  z-index: 999;
+  transform: scale(1.1);
+}
+.delete-card .btn {
+  background-color: #c2bc0d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #b7b7b7;
+  border-radius: 8px;
+  font-weight: bold;
+  padding: 4px 5px 4px 17px;
+}
+.delete-card .btn img {
+  width: 25px;
+}

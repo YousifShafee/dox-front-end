@@ -1,0 +1,14 @@
+.companies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+.companies img {
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.161));
+}
+.companies img:hover {
+  z-index: 999;
+  transform: scale(1.1);
+}

@@ -1,0 +1,44 @@
+.user-account-1 .texts,
+.settings .texts {
+  margin-bottom: -2rem;
+}
+.user-account-1 .admin-settings {
+  background-image: none;
+  padding: 0;
+}
+.user-account-1 .styled-table .btns {
+  justify-content: space-between;
+  gap: 3rem;
+}
+.user-account-1 .styled-table {
+  padding: 0rem 1rem 2rem 1rem;
+}
+.user-account-1 .styled-table tbody tr td:first-of-type {
+  color: #000;
+}
+.user-account-1 .edit-watch {
+  display: flex;
+  gap: 10px;
+}
+.user-account-1 .edit-watch-ad {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #1570e84d;
+  padding-bottom: 3px;
+  cursor: pointer;
+}
+.user-account-1 .edit-watch-ad img {
+  width: 20px;
+}
+.user-account-1 .styled-table th,
+.user-account-1 .styled-table td {
+  padding: 12px 1rem;
+}
+@media (max-width: 768px) {
+  .user-account-1 .texts {
+    margin-bottom: 1rem;
+  }
+  .user-account-1 .styled-table .btns {
+    gap: 1rem;
+  }
+}

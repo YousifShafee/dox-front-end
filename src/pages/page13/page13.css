@@ -1,0 +1,121 @@
+.auth .dox {
+  font-family: sans-serif;
+  white-space: nowrap;
+  font-weight: bold;
+  font-size: 4rem;
+  letter-spacing: 12px;
+  text-align: center;
+  color: #c2bc0b !important;
+  margin: 1rem;
+}
+.auth .card p {
+  text-align: center;
+  color: #747474;
+}
+.auth .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.auth .card {
+  padding: 1rem 0.5rem;
+  filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.161));
+  border: 2px solid #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.auth .card h3 {
+  text-align: center;
+}
+.auth .card .name {
+  gap: 10px;
+}
+.auth .card .inputs {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  margin: 1rem 2rem;
+}
+.auth .card .inputs input {
+  width: 100%;
+  padding: 7px 12px;
+  border-radius: 7px;
+  max-width: inherit;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+}
+.auth-login .card .inputs input {
+  padding: 7px 50px !important;
+}
+.auth .card .button {
+  width: 100%;
+  font-weight: bold;
+  background: #c2bc0b;
+  border: 1px solid #999;
+  border-radius: 7px;
+  padding: 7px 0;
+  margin-top: 1rem;
+  text-align: center;
+}
+.auth-login .card .button {
+  font-size: 17px;
+}
+.auth .card .radios {
+  display: flex;
+  gap: 10px;
+}
+.auth .card .radio {
+  border: 1px solid #bbb;
+  background-color: #fff;
+  display: flex;
+  padding: 8px 12px;
+  width: 5.5rem;
+  gap: 10px;
+  align-items: center;
+  filter: drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.161));
+}
+.auth .card .instruct {
+  margin: 10px 0;
+  font-size: 1rem;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #bbb;
+}
+.auth-login .card .instruct {
+  width: 75%;
+  text-align: center;
+  padding-bottom: 25px !important;
+}
+.auth .card .login {
+  padding: 9px;
+}
+.auth-login .card .login {
+  width: 75%;
+  text-align: end;
+}
+.auth .card .login h4 {
+  margin-left: 20px;
+}
+.auth .footer {
+  padding: 2px;
+  margin: 5rem auto 1rem auto;
+  background-color: #aeaeae;
+  width: 70%;
+
+  filter: drop-shadow(0px 10px 11px rgba(0, 0, 0, 0.161));
+}
+.auth .conditios {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+.auth .conditios .item {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+.auth .conditios .item img {
+  width: 25px;
+  margin-right: 7px;
+}

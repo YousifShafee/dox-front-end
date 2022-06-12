@@ -1,0 +1,69 @@
+.settings .texts {
+  text-align: right;
+}
+.settings .texts p {
+  color: #686868;
+}
+
+.settings .btns {
+  gap: 12px;
+}
+.settings .btns .main {
+  color: #fff;
+  background-color: #26b2d6;
+}
+.settings .btns .second {
+  color: #275afe;
+  background-color: #fff;
+  text-decoration: underline;
+  text-decoration-color: #1570e84d;
+  transition: 0.3s ease-in-out;
+}
+.settings .btns .second:hover {
+  color: #fff;
+  background-color: #26b2d6;
+  text-decoration: none;
+}
+.settings .btns .btn {
+  border-radius: 6px;
+  min-width: 7rem;
+  padding: 10px 15px;
+}
+.settings .body {
+  border: 1px solid #ddd;
+  padding: 2rem 1.5rem;
+}
+.settings .settings-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
+  padding: 1rem 1rem;
+  margin: 1rem 0;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.settings .header {
+  color: #26b2d6;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  background-color: #d9d9d9;
+  padding: 10px 15px;
+  border-radius: 7px;
+}
+.settings .header img {
+  width: 25px;
+}
+.settings input {
+  padding: 7px 20px;
+  text-align: right;
+}
+.settings input::placeholder {
+  text-align: right;
+  opacity: 0.7;
+  font-weight: 500;
+}

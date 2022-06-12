@@ -1,0 +1,42 @@
+.admins-login {
+  background-image: linear-gradient(#84afb9, #6c7877);
+  padding-bottom: 4rem;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.admins-login .input {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 1rem;
+  width: 25%;
+  justify-content: space-around;
+}
+.admins-login input {
+  width: 16rem;
+  height: 2.3rem;
+  border-radius: 7px;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+}
+.admins-login .btn {
+  background-color: #c2bc0b;
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 7px;
+}
+.admins-login .logo-header .logo {
+  width: 100%;
+}
+.admins-login .logo-header .dox {
+  font-size: 25px;
+}
+.admins-login h2:first-of-type {
+  z-index: 1;
+}
+.admins-login .text-reflect {
+  margin-top: -3.1rem;
+  color: #e6e6e633;
+}

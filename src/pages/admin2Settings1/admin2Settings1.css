@@ -1,0 +1,119 @@
+.admin-settings {
+  background-image: linear-gradient(#84afb9, #6c7877);
+  padding-bottom: 4rem;
+}
+
+.admin-settings .fill-container {
+  border: 1px solid #707070;
+  padding: 5.5rem 8.5rem;
+  background-color: #f6f6f6;
+}
+.admin-settings .fill-container .box {
+  background-color: #fff;
+  padding: 3rem 2rem;
+  border: 1px solid #e7e7e7;
+}
+.admin-settings .admin-settings-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
+  padding: 1rem 1rem;
+  margin: 1rem 0;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.admin-settings .header {
+  color: #26b2d6;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  background-color: #d9d9d9;
+  padding: 10px 15px;
+  border-radius: 7px;
+}
+.admin-settings .header img {
+  width: 25px;
+}
+.admin-settings input {
+  padding: 7px 20px;
+  text-align: right;
+}
+.admin-settings input::placeholder {
+  text-align: right;
+  opacity: 0.7;
+  font-weight: 500;
+}
+.admin-settings .admin-settings-cards {
+  border: 1px solid #e4e4e4;
+  padding: 0.7rem;
+  margin-bottom: 1rem;
+}
+.admin-settings .admin-settings-cards > span {
+  display: block;
+  text-align: end;
+  margin: 1.2rem 0.8rem 1.2rem 0;
+}
+.admin-settings .admin-settings-cards .card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.admin-settings .update-logo-box {
+  display: flex;
+  background: #dfdfdf;
+  border: 1px solid #b7b7b7;
+  padding: 1.7rem 3.5rem;
+  border-radius: 5px;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 8px;
+  transition: all 0.3s ease-in-out;
+}
+.admin-settings .update-logo-box:hover {
+  z-index: 999;
+  transform: scale(1.1);
+}
+.admin-settings .update-logo-box img {
+  width: 80px;
+}
+
+.admin-settings .update-logo-box .add-img {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  bottom: 3px;
+  right: 8px;
+  cursor: pointer;
+}
+.admin-settings .update-logo-box .dox {
+  font-size: 27px !important;
+}
+.admin-settings .custom-main {
+  color: #fff;
+  background-color: #45b2d6;
+  padding: 7px 11px !important;
+}
+
+.admin-settings .admin-settings-cards .dirct-img {
+  cursor: pointer;
+  width: 8rem;
+  margin-top: 2rem;
+  margin-right: 1rem;
+}
+.img-url {
+  height: 11rem;
+  width: 100%;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .admin-settings .fill-container {
+    padding: 0;
+  }
+  .admin-settings .admin-settings-cards .card {
+    align-items: center;
+  }
+}
