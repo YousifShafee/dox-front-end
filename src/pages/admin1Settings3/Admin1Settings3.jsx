@@ -3,9 +3,10 @@ import { useState } from "react";
 
 // Import components
 import AdminNavbar from "../../components/header/AdminNavbar";
-import { Add, Edit, NormalU, Search, USER_URL, ViceD, ViceU } from "../../config";
+import { Add, Admin, Edit, NormalU, Search, USER_URL, ViceD, ViceU } from "../../config";
 import API, { fetchSearchField } from "../../API";
 import { useEffect } from "react";
+import { useLogin } from "../../components/login/useLogin";
 
 export default function Admin1Settings3() {
   // Show & Hide sections
@@ -13,11 +14,21 @@ export default function Admin1Settings3() {
   const [hideUpdatePass, setHideUpdatePass] = useState(false);
   const [hideDeleteAdmin, setHideDeleteAdmin] = useState(false);
   const [hideDeleteUser, setHideDeleteUser] = useState(false);
-
+  const {adminId, isAdminLogin, adminMission} = useLogin()
   const [messages, setMessages] = useState('');
   const [viceUser, setViceUser] = useState([]);
   const [normalUser, setNormalUser] = useState([]);
+  const checkAdmin = () => {
+    if(!isAdminLogin){
+      setMessages("يجب تسجيل دخول الأدمن")
+      return
+    }
+    if(adminMission !== Admin){
+      setMessages("هذا المستخدم ليس له الصلاحية")
+    }
+  }
   const handleSubmit = async (event) => {
+    checkAdmin()
     event.preventDefault();
     var { email, pass, fname, lname, phone, gender, mission } = document.forms[0];
     var request = new FormData()
@@ -31,21 +42,20 @@ export default function Admin1Settings3() {
     const response = await API.postRequest(USER_URL, Add, request)
     if (response.status === 201) {
       setMessages('تم إنشاء الحساب بنجاح')
-      // setIsSubmit(true)
     } else if (response.status === 400) {
       setMessages(response.data.data[0])
-      // setIsSubmit(true)
     } else {
       setMessages('حدث خطأ أثناء إنشاء الحساب');
-      // setIsSubmit(false)
     }
   }
 
   const deleteUser = async (user_id) => {
+    checkAdmin()
     await API.deleteRequest(USER_URL, user_id)
   }
 
   const passSubmit = async (event) => {
+    checkAdmin()
     event.preventDefault();
     var { npass, rpass } = document.forms[1];
     if (npass.value !== rpass.value) {
@@ -54,7 +64,7 @@ export default function Admin1Settings3() {
     }
     var request = new FormData()
     request.append('password', npass.value)
-    const response = await API.postRequest(USER_URL + '2/', Edit, request)        // TODO change id value
+    const response = await API.postRequest(USER_URL + adminId + '/', Edit, request)
     if (response.status === 200) {
       setMessages('تم تغيير البيانات بنجاح')
     } else if (response.status === 400) {
@@ -66,6 +76,7 @@ export default function Admin1Settings3() {
   }
 
   const searchAd = async (event) => {
+    checkAdmin()
     event.preventDefault();
     var { username } = document.forms[2];
     var request = new FormData();
@@ -107,7 +118,6 @@ export default function Admin1Settings3() {
   }
 
   useEffect(() => {
-
     async function getNormalUser() {
       await API.getAll(USER_URL)
         .then(response => {

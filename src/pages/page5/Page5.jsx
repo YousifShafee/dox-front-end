@@ -52,7 +52,7 @@ export default function Page5() {
   return (
     <>
       <Navbar />
-      <div className="fill-container d-flex m-4">
+      <div className="fill-container d-flex mt-2">
         <Slider
           imgs={images}
         />

@@ -1,28 +1,33 @@
 import "./page14.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useState } from "react";
 import API from "../../API";
 import { SendCode, USER_URL } from "../../config";
 
 export default function Page14() {
-  const [messages, setMessages] = useState('');
+  const history = useHistory();
+  const [messages, setMessages] = useState("");
   const handleSubmit = async (event) => {
     event.preventDefault();
     var { email } = document.forms[0];
     var request = new FormData();
-    request.append('email', email.value)
-    const response = await API.postRequest(USER_URL, SendCode, request)
+    request.append("email", email.value);
+    const response = await API.postRequest(USER_URL, SendCode, request);
     if (response.status === 200) {
-      setMessages('تم إرسال كود التفعيل إلى البريد الإلكتروني')
+      setMessages("تم إرسال كود التفعيل إلى البريد الإلكتروني");
+      history.push({
+        pathname: "/15",
+        state: {user_email: email.value}
+      });
     } else if (response.status === 404) {
-      setMessages('هذا البريد غير موجود')
+      setMessages("هذا البريد غير موجود");
     } else if (response.status === 400) {
-      setMessages(response.data.data[0])
+      setMessages(response.data.data[0]);
       // setIsSubmit(true)
     } else {
-      setMessages('حدث خطأ أثناء تسجيل الدخول')
+      setMessages("حدث خطأ أثناء تسجيل الدخول");
     }
-  }
+  };
   return (
     <>
       <div className="auth auth-pass">
@@ -44,13 +49,15 @@ export default function Page14() {
             </p>
             <form onSubmit={handleSubmit} className="inputs">
               <h4 className="mt-10">البريد الالكترونى</h4>
-              <input name='email' type="email" />
-              <button type="submit" className="fs-1">متابعة</button>
+              <input name="email" type="email" />
+              <button type="submit" className="fs-1">
+                متابعة
+              </button>
             </form>
             <div className="text-center instruct color-blue "></div>
             <div className="login">
               <h4 className="d-inline ">هل لديك حساب بالفعل؟</h4>
-              <Link className="color-blue f-bold" to={"/"}>
+              <Link className="color-blue f-bold" to={"/13"}>
                 تسجيل الدخول
               </Link>
             </div>

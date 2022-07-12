@@ -1,4 +1,4 @@
-import "./page20.css";
+import "./carsaleshow.css";
 
 // Import components
 import Slider from "../../components/slider/Slider";
@@ -8,6 +8,7 @@ import Chatbot from "../../components/chatbot/Chatbot";
 import API from "../../API";
 import { useEffect, useState } from "react";
 import { CAR_SALES_URL } from "../../config";
+import { useLocation } from "react-router-dom";
 
 export default function Page20() {
   const [price, setPrice] = useState('')
@@ -30,10 +31,11 @@ export default function Page20() {
   const [condition, setCondition] = useState('')
   const [kilometer, setKilometer] = useState('')
   const [adType, setAdType] = useState('')
+  const location = useLocation()
 
   useEffect(() => {
     async function fetchAd() {
-      await API.getBy(CAR_SALES_URL, '1')          // TODO change this id value
+      await API.getBy(CAR_SALES_URL, location.state.ad_id)
         .then(response => {
           setPrice(response.ad_id.price)
           setImages({img: response.ad_id.ad_image.images})
@@ -63,7 +65,7 @@ export default function Page20() {
           setRentalOption(response.rental_option)
           setCondition(response.car.condition)
           setKilometer(response.kilometer)
-          setAdType(response.ad_type)
+          setAdType(response.offer_type)
         })
         .catch(e => console.error(e))
     }
@@ -84,7 +86,7 @@ export default function Page20() {
                 {price}
               </button>
               <button className="fs-1 f-bold btn-icon">
-                {phone}
+                01067764726
                 <img
                   className="add-icon"
                   src="./assets/imgs/phone.png"

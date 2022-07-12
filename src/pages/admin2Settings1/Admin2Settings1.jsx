@@ -24,16 +24,19 @@ import {
   Furniture,
   AllWithoutAd,
   IMAGE_URL,
-  Edit
+  Edit,
+  ViceU
 } from "../../config";
 import { useEffect } from "react";
 import API, { fetchImage } from "../../API";
+import { useLogin } from "../../components/login/useLogin";
 
 export default function Admin2Settings1() {
   // Show & Hide sections
   const [hideUpdateLogo, setHideUpdateLogo] = useState(false);
   const [hideUpdateMain, setHideUpdateMain] = useState(false);
   const [hideUpdateFav, setHideUpdateFav] = useState(false);
+  const [messages, setMessages] = useState('')
   // Upload imgs
   const [background, setBackground] = useState(null);
   const [img, setImg] = useState(null);
@@ -55,16 +58,33 @@ export default function Admin2Settings1() {
   const [electron, setElectron] = useState([])
   const [featur_furniture, setFeaturFurniture] = useState([])
   const [furniture, setFurniture] = useState([])
+  const { adminId, isAdminLogin, adminMission } = useLogin()
+
+  const checkAdmin = () => {
+    if (!isAdminLogin) {
+      setMessages("يجب تسجيل دخول الأدمن")
+      return false
+    }
+    if (adminMission !== ViceU) {
+      setMessages("هذا المستخدم ليس له الصلاحية")
+      return false
+    }
+    return true
+  }
 
   const updateLogo = async (img, pk) => {
-    var request = new FormData()
-    request.append('images', img)
-    const response = await API.editRequest(IMAGE_URL, pk, Edit, request)
-    setLogo({
-      img: response.data.images,
-      id: response.data.id,
-      category: response.data.category
-    })
+    if (checkAdmin()) {
+      var request = new FormData()
+      request.append('images', img)
+      if (!isAdminLogin) { return }
+      request.append('user', adminId)
+      const response = await API.editRequest(IMAGE_URL, pk, Edit, request)
+      setLogo({
+        img: response.data.images,
+        id: response.data.id,
+        category: response.data.category
+      })
+    }
   }
 
   useEffect(() => {
@@ -158,7 +178,7 @@ export default function Admin2Settings1() {
                             id="logo"
                             type="file"
                             accept="image/*"
-                            onChange={(e) => {updateLogo(e.target.files[0], logo.id)}}
+                            onChange={(e) => { updateLogo(e.target.files[0], logo.id) }}
                             hidden
                           />
                           <img

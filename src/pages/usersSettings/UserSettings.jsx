@@ -8,6 +8,7 @@ import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
 import { Edit, USER_URL } from "../../config";
 import API from "../../API";
+import { useLogin } from "../../components/login/useLogin";
 
 export default function UserSettings() {
   const [hidePersonal, setHidePersonal] = useState(false);
@@ -17,6 +18,8 @@ export default function UserSettings() {
   const [fname, setFName] = useState('');
   const [lname, setLName] = useState('');
   const [messages, setMessages] = useState('');
+  const {userId} = useLogin()
+  
   const dataSubmit = async (event) => {
     event.preventDefault();
     var request = new FormData()
@@ -25,6 +28,7 @@ export default function UserSettings() {
     request.append('phone', phone)
     editSubmit(request)
   }
+
   const passSubmit = async (event) => {
     event.preventDefault();
     var { npass, rpass } = document.forms[0];
@@ -38,7 +42,7 @@ export default function UserSettings() {
   }
 
   const editSubmit = async (request) => {
-    const response = await API.postRequest(USER_URL + '2/', Edit, request)        // TODO change id value
+    const response = await API.postRequest(USER_URL + userId + '/', Edit, request)
     if (response.status === 200) {
       setMessages('تم تغيير البيانات بنجاح')
     } else if (response.status === 400) {
@@ -50,7 +54,7 @@ export default function UserSettings() {
   }
   useEffect(() => {
     const getData = async () => {
-      await API.getBy(USER_URL, '2')        // TODO change id value
+      await API.getBy(USER_URL, sessionStorage.getItem('userId'))
         .then(response => {
           setFName(response.first_name)
           setLName(response.last_name)
@@ -61,7 +65,7 @@ export default function UserSettings() {
   }, [])
   return (
     <>
-      <Navbar user={true} />
+      <Navbar />
       <div className="settings">
 
         <div className="container">

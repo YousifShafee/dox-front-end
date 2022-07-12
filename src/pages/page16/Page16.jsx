@@ -1,18 +1,18 @@
 import "./page16.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import API from "../../API";
 import { ChangePass, USER_URL } from "../../config";
 
 export default function Page16() {
   const [messages, setMessages] = useState('');
+  const location = useLocation()
   const handleSubmit = async (event) => {
     event.preventDefault();
     var { pass } = document.forms[0];
-    var email = 'you@gmail.com'                    //  TODO change email value
     var request = new FormData();
     request.append('password', pass.value)
-    request.append('email', email)
+    request.append('email', location.state.user_email)
     const response = await API.postRequest(USER_URL, ChangePass, request)
     if (response.status === 200) {
       setMessages('تم تغيير كلمة المرور بنجاح')

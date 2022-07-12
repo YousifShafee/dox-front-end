@@ -1,5 +1,5 @@
 import "./page11.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useState } from "react";
 import API from "../../API";
 import { NormalU, USER_URL, Add } from "../../config";
@@ -7,7 +7,7 @@ import { NormalU, USER_URL, Add } from "../../config";
 export default function Page11() {
   // const [IsSubmit, setIsSubmit] = useState(false);
   const [messages, setMessages] = useState('');
-
+  const history = useHistory();
   const handleSubmit = async (event) => {
     event.preventDefault();
     var { email, pass, fname, lname, phone, gender } = document.forms[0];
@@ -22,6 +22,10 @@ export default function Page11() {
     const response = await API.postRequest(USER_URL, Add, request)
     if (response.status === 201) {
       setMessages('تم إرسال كود التفعيل إلى البريد الإلكتروني')
+      history.push({
+        pathname: "/12",
+        state: {user_email: email.value}
+      });
       // setIsSubmit(true)
     } else if (response.status === 400) {
       setMessages(response.data.data[0])
@@ -73,7 +77,7 @@ export default function Page11() {
             </h4>
             <div className="login">
               <h4 className="d-inline ">هل لديك حساب بالفعل؟</h4>
-              <Link className="color-blue f-bold" to={"/"}>
+              <Link className="color-blue f-bold" to={"/13"}>
                 تسجيل الدخول
               </Link>
             </div>

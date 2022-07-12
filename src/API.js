@@ -56,28 +56,36 @@ const apiSettings = {
   },
 };
 
+const getImageItem = (item) => {
+  return {
+    img: item.images,
+    id: item.id,
+    category: item.category,
+    payment: item.payment_n,
+    image_time: item.created_date
+  }
+}
+
+export const getAdItem = (item) => {
+  return {
+    'id': item.product_id,
+    'img': item.ad_image.images,
+    'name': item.ad_name,
+    'type': item.ad_type,
+    'price': item.price,
+    'ad_time': item.created_date,
+  }
+}
+
 export const fetchImage = async (category) => {
   let images = []
   await apiSettings.getBy(IMAGE_URL, category)
     .then(response => {
       images = response.map(item => {
-        return {
-          img: item.images, id: item.id, category: item.category
-        }
+        return getImageItem(item)
       })
     })
   return images
-}
-
-export const getAdItem = (item) => {
-  return {
-    'id': item.id,
-    'img': item.ad_image.images,
-    'name': item.ad_name,
-    'price': item.price,
-    'ad_time': item.created_date,
-    'payment': item.payment_n,
-  }
 }
 
 export const fetchEmailAd = async (user_id) => {
@@ -134,7 +142,7 @@ export const fetchSearchField = async (adPageUrl, request) => {
   await apiSettings.postRequest(adPageUrl, Search, request)
     .then(response => {
       ads = response.data.map(item => {
-        let result = getAdItem(item)
+        let result = getImageItem(item)
         return { ...result, img: `${BASE_URL}${result.img}` }
       })
     })

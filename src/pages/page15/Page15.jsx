@@ -1,20 +1,26 @@
 import "./page15.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useState } from "react";
 import API from "../../API";
 import { ConfirmAccount, USER_URL } from "../../config";
 
 export default function Page15() {
   const [messages, setMessages] = useState('');
+  const location = useLocation()
+  const history = useHistory()
   const handleSubmit = async (event) => {
     event.preventDefault();
     var { code } = document.forms[0];
     var request = new FormData()
     request.append('code', code.value)
-    request.append('email', 'you@gmail.com')                   // TODO change email value
+    request.append('email', location.state.user_email)
     const response = await API.postRequest(USER_URL, ConfirmAccount, request)
     if (response.status === 200) {
       setMessages('تم التحقق بنجاح')
+      history.push({
+        pathname: "/16",
+        state: {user_email: location.state.user_email}
+      });
     } else if (response.status === 400) {
       setMessages(response.data.data[0])
       // setIsSubmit(true)

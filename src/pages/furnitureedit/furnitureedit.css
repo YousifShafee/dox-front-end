@@ -1,0 +1,5 @@
+.reset-inputs input {
+  border-radius: 13px !important;
+  max-width: 220px !important;
+  font-size: 1.1rem !important;
+}

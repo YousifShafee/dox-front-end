@@ -8,15 +8,41 @@ import Chatbot from "../../components/chatbot/Chatbot";
 import { AD_URL } from "../../config";
 import API, { fetchEmailAd } from "../../API";
 import { useEffect, useState } from "react";
+import { useLogin } from "../../components/login/useLogin";
 
 export default function UserAccount1() {
   const [ads, setAds] = useState([])
   const deleteAd = async (ad_id) => {
     await API.deleteRequest(AD_URL, ad_id)
   }
+  
+  const navigate_edit = {
+    car_sales: "100",
+    car_rent: "101",
+    property_sales: "102",
+    property_rent: "103",
+    mobile: "104",
+    access: "105",
+    midical: "106",
+    electron: "107",
+    furniture: "108",
+  }
+
+  const navigate_show = {
+    car_sales: "200",
+    car_rent: "201",
+    property_sales: "202",
+    property_rent: "203",
+    mobile: "204",
+    access: "205",
+    midical: "206",
+    electron: "207",
+    furniture: "208",
+  }
+  
   useEffect(() => {
     async function setAd() {
-      await fetchEmailAd('2')      // TODO change id value
+      await fetchEmailAd(sessionStorage.getItem('userId'))
         .then(response => {
           setAds(
             response.map(item => {
@@ -38,6 +64,7 @@ export default function UserAccount1() {
                 <td>
                   <img
                     src={item.img}
+                    style={{ maxWidth: "300px" }}
                     alt="img cart"
                     className="scale-hover"
                   />
@@ -46,14 +73,26 @@ export default function UserAccount1() {
                 <td>
                   <div className="edit-watch color-main">
                     <div className="edit-watch-ad">
-                      <span>عدل الاعلان</span>
+                      <Link to={{
+                        pathname: navigate_edit[item.type],
+                        state: {ad_id: item.id},
+                      }}>
+                        <span>
+                          عدل الاعلان
+                        </span>
+                      </Link>
                       <img
                         src="./assets/imgs/icon-edit.png"
                         alt="icon-watch"
                       />
                     </div>
                     <div className="edit-watch-ad">
+                    <Link to={{
+                        pathname: navigate_show[item.type],
+                        state: {ad_id: item.id},
+                      }}>
                       <span>شاهد الاعلان</span>
+                      </Link>
                       <img
                         src="./assets/imgs/icon-watch.png"
                         alt="icon-watch"
@@ -71,7 +110,7 @@ export default function UserAccount1() {
   }, [])
   return (
     <>
-      <Navbar user={true} />
+      <Navbar />
       <div className="settings user-account-1">
         <div className="container">
           <div className="box">

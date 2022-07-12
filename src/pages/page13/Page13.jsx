@@ -6,6 +6,11 @@ import { Login, NormalU, USER_URL } from "../../config";
 
 export default function Page13() {
   const [messages, setMessages] = useState('');
+  const setSession = (token, userEmail, userId) => {
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('userEmail', userEmail);
+    sessionStorage.setItem('userId', userId);
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
     var { email, password } = document.forms[0];
@@ -16,6 +21,7 @@ export default function Page13() {
     const response = await API.postRequest(USER_URL, Login, request)
     if (response.status === 200) {
       setMessages('تم تسجيل الدخول بنجاح')
+      setSession(response.data['token'], response.data['email'], response.data['id']);
     } else if(response.data.data[0] === "Not Active") {
       setMessages('هذا الحساب غير مفعل')
     } else if (response.status === 400) {
@@ -53,7 +59,7 @@ export default function Page13() {
                 الاستخدام والبيع و الشراء و سياسة الخصوصية
               </h4>
               <div className="login">
-                <Link className="color-blue f-bold" to={"/"}>
+                <Link className="color-blue f-bold" to={"/14"}>
                   هل نسيت كلمة المرور؟
                 </Link>
               </div>

@@ -9,7 +9,7 @@ import Chatbot from "../../components/chatbot/Chatbot";
 export default function UserAccount() {
   return (
     <>
-      <Navbar user={true} />
+      <Navbar />
       <div className="settings user-account-1">
         <div className="container">
           <div className="box">

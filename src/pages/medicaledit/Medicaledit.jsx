@@ -1,33 +1,38 @@
-import "./page17.css";
-import { useState } from "react";
+import "./medicaledit.css";
+import { useState, useEffect } from "react";
 
 // Import components
 
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import { Add, AD_URL } from "../../config";
-import API from "../../API";
+import Dropdown from "../../components/dropdown/Dropdown";
+import { AD_URL, Edit, MEDICAL_URL } from "../../config";
+import API from "../../API"
+import { useLocation } from "react-router-dom";
 
-export default function Page17() {
+export default function Page23() {
   const [counter, setCounter] = useState(4096);
   const [img, setImg] = useState(undefined);
-
+  const [ad_name, setAdName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('')
+  const [condition, setCondition] = useState('')
+  const [type, setType] = useState('')
+  const location = useLocation()
   const [messages, setMessages] = useState('');
   const handleSubmit = async (event) => {
     event.preventDefault();
-    var { ad_name, email, uname, uphone, ad_type, description } = document.forms[0];
     var request = new FormData();
-    request.append('ad_name', ad_name.value)
-    request.append('email', email.value)
-    request.append('uname', uname.value)
-    request.append('uphone', uphone.value)
-    request.append('ad_type', ad_type.value)
-    request.append('description', description.value)
-    request.append('image', img)
-    const response = await API.postRequest(AD_URL, Add, request)
-    if (response.status === 201) {
-      setMessages('تم إنشاء الإعلان بنجاح')
+    request.append('ad_name', ad_name)
+    request.append('description', description)
+    request.append('ad_image', img)
+    request.append('price', price)
+    request.append('condition', condition)
+    request.append('type', type)
+    const response = await API.editRequest(MEDICAL_URL, location.state.ad_id, Edit, request);
+    if (response.status === 200) {
+      setMessages('تم حفظ التعديلات بنجاح')
     } else if (response.status === 404) {
       setMessages('هذا البريد غير موجود')
     } else if (response.status === 400) {
@@ -37,74 +42,92 @@ export default function Page17() {
       setMessages('حدث خطأ أثناء حفظ الإعلان')
     }
   }
+  useEffect(()=>{
+    API.getBy(MEDICAL_URL, location.state.ad_id)
+    .then(response => {
+      setImg(response.ad_id.ad_image.images)
+      setAdName(response.ad_id.ad_name)
+      setDescription(response.ad_id.description)
+      setPrice(response.ad_id.price)
+      setCondition(response.condition)
+      setType(response.type)
+    })
+    },[])
   return (
     <>
-      <Navbar user={true} />
+      <Navbar />
       <div className="ad-adver">
         <div className="container">
           <div className="box">
-            <div className="head fs-1">أضف اعلان</div>
+            <div className="head fs-1">تعديل الاعلان</div>
             <div className="body">
               <form onSubmit={handleSubmit} className="inputs ">
                 {messages}
                 <div className="name">
                   <span>اسم الاعلان</span>
-                  <input name="ad_name" type="text" />
+                  <input value={ad_name} onChange={e => setAdName(e.target.value)} type="text" />
                 </div>
                 <div className="type">
                   <span>صنف الاعلان</span>
                   <div className="input position-relative d-flex ">
-                    <input name="ad_type" type="text" />
-                    <img src="./assets/imgs/down-arrow.png" alt="icon" />
+                    {<input type="text" value="مستلزمات طبيه" />}
+                    
+                    
                   </div>
                   <div className="icons">
-                    <img src="./assets/imgs/car.png" alt="icon" />
-                    <img src="./assets/imgs/home.png" alt="home" />
-                    <img src="./assets/imgs/mobile-phone.png" alt="mobile" />
-                    <img src="./assets/imgs/accessory.png" alt="accessory" />
+                    
                     <img
                       src="./assets/imgs/diagnosis_1.png"
                       alt="diagnosis_1"
                       className=""
                     />
-                    <img
-                      src="./assets/imgs/electronics.png"
-                      alt="electronics"
-                      className=""
-                    />
-                    <img
-                      src="./assets/imgs/furniture.png"
-                      alt="furniture"
-                      className=""
-                    />
+                    
                   </div>
                 </div>
-                <div className="name-email">
-                  <div className="email">
-                    <span>الايميل</span>
-                    <input name="email" type="email" />
+                <div className="search mt-3 mb-2 reset-inputs">
+                  <div className="position-relative btn-icon">
+                    <span className="mr-1 fs-1">مستلزمات طبيه</span>
+                    <img
+                      src="./assets/imgs/diagnosis_1.png"
+                      alt="diagnosis_1"
+                      className=""
+                    />
                   </div>
-                  <div className="name">
-                    <span>الاسم</span>
-                    <input name="uname" type="text" />
+                  <div className="inputs d-grid-2">
+                    <div className="input position-relative d-flex ">
+                      <input type="text" placeholder="السعر" 
+                      value={price} onChange={e => setPrice(e.target.value)}/>
+                      <img src="./assets/imgs/down-arrow.png" alt="icon" />
+                    </div>
+                    <div className="input position-relative d-flex ">
+                      <input type="text" placeholder="الحالة" 
+                      value={condition} onChange={e => setCondition(e.target.value)}/>
+                      <img src="./assets/imgs/down-arrow.png" alt="icon" />
+                    </div>
+                    <div className="input position-relative d-flex ">
+                      <input type="text" placeholder="النوع" 
+                      value={type} onChange={e => setType(e.target.value)}/>
+                      <img src="./assets/imgs/down-arrow.png" alt="icon" />
+                    </div>
                   </div>
                 </div>
+                
                 <div className="details">
                   <div className="phone-desc">
-                    <div className="phone">
-                      <span>رقم الموبيل</span>
-                      <input name="uphone" type="text" />
-                    </div>
+                    
                     <div className="desc">
                       <span>اوصف اعلانك</span>
                       <div className="textarea">
                         <textarea
                           cols="22"
-                          name="description"
+                          value={description}
                           rows="6"
                           maxLength={4096}
                           onChange={(e) =>
-                            setCounter(4096 - e.target.value.length)
+                            {
+                              setCounter(4096 - e.target.value.length)
+                              setDescription(e.target.value)
+                            }
                           }
                         ></textarea>
                         <span className="counter">
@@ -119,7 +142,6 @@ export default function Page17() {
                       <label className="img-box" htmlFor="img1">
                         <input
                           id="img1"
-                          name="image"
                           type="file"
                           accept="image/*"
                           onChange={(e) => setImg(e.target.files[0])}
@@ -138,24 +160,23 @@ export default function Page17() {
                             alt="icon"
                           />
                         )}
-                      </label>                      
+                      </label>
                     </div>
                   </div>
                 </div>
-                <div className="submit-ad">
+                <div className="submit-ad mt-3">
                   <div className="check">
                     <input type="checkbox" name="" />
                     بنشرك للإعلان، أنت توافق على شروط الإستخدام و قواعد النشر
                   </div>
                   <div className="btns my-1">
                     <div className="add-box">
-                      <button type="submit" className="btn btn-add  search-btn">
-                        <span className="fs-1">أنشر الاعلان</span>
-                        <img
-                          className="add-icon"
-                          src="./assets/imgs/add.png"
-                          alt="add"
-                        />
+                      <button
+                        className="btn btn-add  search-btn"
+                        type="submit"
+                        style={{ padding: "19px 35px" }}
+                      >
+                        <span className="fs-1">حفظ التعديلات</span>
                       </button>
                     </div>
                   </div>

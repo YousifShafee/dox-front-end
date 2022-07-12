@@ -28,6 +28,7 @@ import {
   IMAGE_URL,
   Edit
 } from "../../config";
+import { useLogin } from "../../components/login/useLogin";
 
 export default function Admin1Settings1() {
   // Show & Hide sections
@@ -56,10 +57,13 @@ export default function Admin1Settings1() {
   const [background, setBackground] = useState(null);
   const [img, setImg] = useState(null);
   const [img2, setImg2] = useState(null);
+  const { adminId, isAdminLogin } = useLogin()
 
   const updateLogo = async (img, pk) => {
     var request = new FormData()
     request.append('images', img)
+    if(!isAdminLogin){ return }
+    request.append('user', adminId)
     const response = await API.editRequest(IMAGE_URL, pk, Edit, request)
     setLogo({
       img: response.data.images,

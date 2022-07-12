@@ -5,6 +5,11 @@ import "./adminsLogin.css";
 
 export default function AdminsLogin() {
   const [messages, setMessages] = useState('');
+  const setSession = (mission, userEmail, userId) => {
+    sessionStorage.setItem('adminMission', mission);
+    sessionStorage.setItem('adminEmail', userEmail);
+    sessionStorage.setItem('adminId', userId);
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
     var { email, password } = document.forms[0];
@@ -14,6 +19,7 @@ export default function AdminsLogin() {
     request.append('mission', [Admin, ViceD, ViceU])
     const response = await API.postRequest(USER_URL, Login, request)
     if (response.status === 200) {
+      setSession(response.data['mission'], response.data['email'], response.data['id']);
       setMessages('تم تسجيل الدخول بنجاح')
     } else if (response.data.data[0] === "Not Active") {
       setMessages('هذا الحساب غير مفعل')

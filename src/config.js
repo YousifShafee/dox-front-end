@@ -14,6 +14,7 @@ const PROPERTIES_RENT_URL = 'properties/rent/';
 
 // Images Categories
 const AllWithoutAd = "without-ad"
+const AllWithoutAdLogoGeneral = "without-ad-logo-general"
 const Logo = "logo"
 const General = "general"
 const CarF = "featur_car"
@@ -44,17 +45,20 @@ const ConfirmAccount = 'confirm_account/'
 const SendCode = 'send_code/'
 const ChangePass = 'change_pass/'
 
-// Request Action
+// General Request Action
 const Add = "add/"
 const Edit = "edit/"
 const Delete = "delete/"
-
-// Ad action
-const EmailAd = "ad/email/"
-const Active = "active/"
 const Search = "search/"
 
+// Ad action
+const EmailAd = "ad/email/"         // get ads for specific account
+
+// Image action
+const Active = "active/"            // to active slider image and fetuere company image
+
 export {
+    AllWithoutAdLogoGeneral,
     Search,
     EmailAd,
     Active,

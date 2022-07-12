@@ -18,7 +18,7 @@ export default function Page2() {
 
   const searchAd = async (event) => {
     event.preventDefault();
-    var { brand, model, lprice, fprice, condition, color, year, kilometer, transmission_type, fuel_type, engine_capacity, ad_type } = document.forms[0];
+    var { brand, model, lprice, fprice, condition, color, year, kilometer, transmission_type, fuel_type, engine_capacity, offer_type } = document.forms[0];
     var request = new FormData();
     request.append('brand', brand.value)
     request.append('model', model.value)
@@ -31,7 +31,7 @@ export default function Page2() {
     request.append('transmission_type', transmission_type.value)
     request.append('fuel_type', fuel_type.value)
     request.append('engine_capacity', parseInt(engine_capacity.value))
-    request.append('ad_type', ad_type.value)
+    request.append('offer_type', offer_type.value)
     setAds(await fetchSearchAD(CAR_SALES_URL, request))
   }
 
@@ -56,7 +56,7 @@ export default function Page2() {
     <>
       <Navbar />
       
-      <div className="fill-container d-flex m-4">
+      <div className="fill-container d-flex mt-2">
         <Slider
           imgs={images}
         />
@@ -111,7 +111,7 @@ export default function Page2() {
               <img src="./assets/imgs/down-arrow.png" alt="icon" />
             </div>
             <div className="input position-relative d-flex ">
-              <input type="text" name="ad_type" placeholder="نوع الاعلان" />
+              <input type="text" name="offer_type" placeholder="نوع الاعلان" />
               <img src="./assets/imgs/down-arrow.png" alt="icon" />
             </div>
           </div>

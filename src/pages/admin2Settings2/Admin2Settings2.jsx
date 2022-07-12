@@ -3,28 +3,47 @@ import "./admin2Settings2.css";
 // Import components
 import AdminNavbar from "../../components/header/AdminNavbar";
 import API, { fetchAd, fetchSearchField } from "../../API";
-import { Active, AD_URL } from "../../config";
+import { Active, AD_URL, ViceU } from "../../config";
 import { useEffect, useState } from "react";
+import { useLogin } from "../../components/login/useLogin";
 
 export default function Admin2Settings2() {
+  const [messages, setMessages] = useState('')
   const [ads, setAds] = useState([])
-
+  const { isAdminLogin, adminMission } = useLogin()
+  const checkAdmin = () => {
+    if (!isAdminLogin) {
+      setMessages("يجب تسجيل دخول الأدمن")
+      return false
+    }
+    if (adminMission !== ViceU) {
+      setMessages("هذا المستخدم ليس له الصلاحية")
+      return false
+    }
+    return true
+  }
   const deleteAd = async (ad_id) => {
-    await API.deleteRequest(AD_URL, ad_id)
+    if (checkAdmin()) {
+      await API.deleteRequest(AD_URL, ad_id)
+    }
   }
 
   const searchAd = async (event) => {
-    event.preventDefault();
-    var { payment_n } = document.forms[0];
-    var request = new FormData();
-    request.append('payment_n', payment_n.value)
-    set_res_ads(await fetchSearchField(AD_URL, request))
+    if (checkAdmin()) {
+      event.preventDefault();
+      var { payment_n } = document.forms[0];
+      var request = new FormData();
+      request.append('payment_n', payment_n.value)
+      set_res_ads(await fetchSearchField(AD_URL, request))
+    }
   }
 
   const activeAd = async (ad_id) => {
-    var request = new FormData()
-    request.append('is_active', true)
-    await API.editRequest(AD_URL, ad_id, Active, request)
+    if (checkAdmin()) {
+      var request = new FormData()
+      request.append('is_active', true)
+      await API.editRequest(AD_URL, ad_id, Active, request)
+    }
   }
 
   const set_res_ads = (response) => {

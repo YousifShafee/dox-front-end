@@ -1,37 +1,43 @@
-import "./page18.css";
-import { useState, useEffect } from "react";
+import "./properitiesrentad.css";
+import { useState } from "react";
 
 // Import components
 
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import { AD_URL, Edit } from "../../config";
+import Dropdown from "../../components/dropdown/Dropdown";
+import { Add, PROPERTIES_RENT_URL } from "../../config";
 import API from "../../API"
+import { useLogin } from "../../components/login/useLogin";
 
 export default function Page18() {
   const [counter, setCounter] = useState(4096);
   const [img, setImg] = useState(undefined);
-  const [ad_name, setAdName] = useState('');
-  const [email, setEmail] = useState('');
-  const [uname, setUname] = useState('');
-  const [uphone, setUphone] = useState('');
-  const [ad_type, setAdType] = useState('');
-  const [description, setDescription] = useState('');
+  const { isUserLogin, userId } = useLogin()
 
   const [messages, setMessages] = useState('');
   const handleSubmit = async (event) => {
     event.preventDefault();
     var request = new FormData();
-    request.append('ad_name', ad_name)
-    request.append('email', email)
-    request.append('uname', uname)
-    request.append('uphone', uphone)
-    request.append('ad_type', ad_type)
-    request.append('description', description)
-    request.append('image', img)
-    const response = await API.editRequest(AD_URL , '1', Edit, request)          // TODO change this id value
-    if (response.status === 200) {
+    var { ad_name,bedroom,bathroom,type,compound,price,area,description } = document.forms[0];    
+    if (!isUserLogin) {
+      setMessages("يجب تسجيل الدخول")
+      return
+    }
+    request.append('user', userId)
+    request.append('ad_name', ad_name.value)
+    request.append('ad_type', "property_rent")
+    request.append('price', price.value)
+    request.append('bedroom', bedroom.value)
+    request.append('bathroom', bathroom.value)
+    request.append('type', type.value)
+    request.append('compound', compound.value)
+    request.append('area', area.value)
+    request.append('description', description.value)
+    request.append('ad_image', img)
+    const response = await API.postRequest(PROPERTIES_RENT_URL, Add, request)
+    if (response.status === 201) {
       setMessages('تم حفظ التعديلات بنجاح')
     } else if (response.status === 404) {
       setMessages('هذا البريد غير موجود')
@@ -42,35 +48,25 @@ export default function Page18() {
       setMessages('حدث خطأ أثناء حفظ الإعلان')
     }
   }
-  useEffect(()=>{
-    API.getBy(AD_URL, '1')                      // TODO change this id value
-    .then(response => {
-      setImg(response.ad_image.images)
-      setAdName(response.ad_name)
-      setEmail(response.user.email)
-      setUname(response.user.first_name + " " + response.user.last_name)
-      setUphone(response.user.phone)
-      setDescription(response.description)
-    })
-    },[])
   return (
     <>
-      <Navbar user={true} />
+      <Navbar />
       <div className="ad-adver">
         <div className="container">
           <div className="box">
-            <div className="head fs-1">تعديل الاعلان</div>
+            <div className="head fs-1">اضف اعلان</div>
             <div className="body">
               <form onSubmit={handleSubmit} className="inputs ">
                 {messages}
                 <div className="name">
                   <span>اسم الاعلان</span>
-                  <input value={ad_name} onChange={e => setAdName(e.target.value)} type="text" />
+                  <input name="ad_name" type="text" />
                 </div>
                 <div className="type">
                   <span>صنف الاعلان</span>
                   <div className="input position-relative d-flex ">
-                    <input type="text" value="سيارات للبيع" />
+                    {/* <input type="text" value="سيارات للبيع" /> */}
+                    <Dropdown />
                     <img src="./assets/imgs/down-arrow.png" alt="icon" />
                   </div>
                   <div className="icons">
@@ -97,98 +93,56 @@ export default function Page18() {
                 </div>
                 <div className="search mt-3 mb-2 reset-inputs">
                   <div className="position-relative btn-icon">
-                    <span className="mr-1 fs-1">سيارات للبيع</span>
+                    <span className="mr-1 fs-1">عقارات للايجار</span>
                     <img src="./assets/imgs/car.png" alt="car" />
                   </div>
                   <div className="inputs d-grid-2">
                     <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="موديل" />
+                      <input type="text" name="price" placeholder="السعر" />
                       <img src="./assets/imgs/down-arrow.png" alt="icon" />
                     </div>
                     <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="اختر الفئة" />
+                      <input type="text" name="bedroom" placeholder="غرف النوم" />
                       <img src="./assets/imgs/down-arrow.png" alt="icon" />
                     </div>
                     <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="نوع الاعلان" />
+                      <input type="text" name="bathroom" placeholder="الحمامات" />
                       <img src="./assets/imgs/down-arrow.png" alt="icon" />
                     </div>
                     <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="السعر" />
+                      <input type="text" name="type" placeholder="النوع" />
                       <img src="./assets/imgs/down-arrow.png" alt="icon" />
                     </div>
                     <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="اللون" />
+                      <input type="text" name="compound" placeholder="كمبوند" />
                       <img src="./assets/imgs/down-arrow.png" alt="icon" />
                     </div>
                     <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="الحالة" />
+                      <input type="text" placeholder="الكماليات" />
                       <img src="./assets/imgs/down-arrow.png" alt="icon" />
                     </div>
                     <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="كيلومترات" />
+                      <input type="text" placeholder="مفروش" />
                       <img src="./assets/imgs/down-arrow.png" alt="icon" />
                     </div>
                     <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="السنة" />
-                      <img src="./assets/imgs/down-arrow.png" alt="icon" />
-                    </div>
-                    <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="ناقل الحركة" />
-                      <img src="./assets/imgs/down-arrow.png" alt="icon" />
-                    </div>
-                    <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="نوع الهيكل" />
-                      <img src="./assets/imgs/down-arrow.png" alt="icon" />
-                    </div>
-                    <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="المحرك (سى سى )" />
-                      <img src="./assets/imgs/down-arrow.png" alt="icon" />
-                    </div>
-                    <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="نوع الوقود" />
-                      <img src="./assets/imgs/down-arrow.png" alt="icon" />
-                    </div>
-                    <div className="input position-relative d-flex "></div>
-                    <div className="input position-relative d-flex ">
-                      <input type="text" placeholder="اضافات" />
+                      <input type="text" name="area" placeholder="المساحة" />
                       <img src="./assets/imgs/down-arrow.png" alt="icon" />
                     </div>
                   </div>
                 </div>
-                <div className="name-email">
-                  <div className="email">
-                    <span>الايميل</span>
-                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
-                  </div>
-                  <div className="name">
-                    <span>الاسم</span>
-                    <input type="text" value={uname} onChange={e => setUname(e.target.value)} />
-                  </div>
-                </div>
+                
                 <div className="details">
                   <div className="phone-desc">
-                    <div className="phone">
-                      <span>رقم الموبيل</span>
-                      <input onChange={e => {
-                        setUphone(e.target.value)}
-                       }
-                        value={uphone} type="text" />
-                    </div>
+                  
                     <div className="desc">
                       <span>اوصف اعلانك</span>
                       <div className="textarea">
                         <textarea
                           cols="22"
-                          value={description}
                           rows="6"
                           maxLength={4096}
-                          onChange={(e) =>
-                            {
-                              setCounter(4096 - e.target.value.length)
-                              setDescription(e.target.value)
-                            }
-                          }
+                          name="description"
                         ></textarea>
                         <span className="counter">
                           {counter} عدد الأحرف المتبقية
@@ -209,7 +163,7 @@ export default function Page18() {
                         />
                         {img ? (
                           <img
-                            src={img}
+                            src={URL.createObjectURL(img)}
                             alt="img"
                             className="img-obj"
                           />
