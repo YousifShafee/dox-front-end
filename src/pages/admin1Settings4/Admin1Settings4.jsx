@@ -4,12 +4,14 @@ import "./admin1Settings4.css";
 import AdminNavbar from "../../components/header/AdminNavbar";
 import { useState } from "react";
 import { useEffect } from "react";
-import { AD_URL } from "../../config";
+import { AD_URL, Admin, ViceU, ViceD } from "../../config";
 import API, { fetchAd, fetchSearchField } from "../../API";
+import { useHistory } from "react-router-dom";
 
 export default function Admin3Settings1() {
   const [ads, setAds] = useState([])
-
+  const history = useHistory()
+  
   const deleteAd = async (ad_id) => {
     await API.deleteRequest(AD_URL, ad_id)
   }
@@ -56,6 +58,17 @@ export default function Admin3Settings1() {
   }
 
   useEffect(() => {
+    let redirect_url = "admins-login"
+    const mission = sessionStorage.getItem('adminMission')
+    if (mission !== Admin) {
+      if (mission === ViceU) {
+        redirect_url = 'admin-2-settings-1'
+      } else if (mission === ViceD) {
+        redirect_url = 'admin-3-settings-1'
+      }
+      history.push(redirect_url)
+      return
+    }
     async function setAd() {
       await fetchAd()
         .then(response => {
@@ -63,11 +76,11 @@ export default function Admin3Settings1() {
         })
     }
     setAd()
-  }, [])
+  }, [history])
   return (
     <>
       <div className="admin-settings delete-ad-page">
-        <AdminNavbar page={"delete"} admin1={true} />
+        <AdminNavbar page={"delete"} />
         <div className="fill-container">
           <div className="title-input">
             <h2 className="fs-1">الإعلانات المنشورة</h2>

@@ -12,37 +12,38 @@ import { useLogin } from "../../components/login/useLogin";
 
 export default function UserAccount1() {
   const [ads, setAds] = useState([])
+  const { userId } = useLogin()
   const deleteAd = async (ad_id) => {
     await API.deleteRequest(AD_URL, ad_id)
-  }
-  
-  const navigate_edit = {
-    car_sales: "100",
-    car_rent: "101",
-    property_sales: "102",
-    property_rent: "103",
-    mobile: "104",
-    access: "105",
-    midical: "106",
-    electron: "107",
-    furniture: "108",
-  }
-
-  const navigate_show = {
-    car_sales: "200",
-    car_rent: "201",
-    property_sales: "202",
-    property_rent: "203",
-    mobile: "204",
-    access: "205",
-    midical: "206",
-    electron: "207",
-    furniture: "208",
-  }
+  } 
   
   useEffect(() => {
+    const navigate_edit = {
+      car_sales: "100",
+      car_rent: "101",
+      property_sales: "102",
+      property_rent: "103",
+      mobile: "104",
+      access: "105",
+      midical: "106",
+      electron: "107",
+      furniture: "108",
+    }
+  
+    const navigate_show = {
+      car_sales: "200",
+      car_rent: "201",
+      property_sales: "202",
+      property_rent: "203",
+      mobile: "204",
+      access: "205",
+      midical: "206",
+      electron: "207",
+      furniture: "208",
+    }
+    
     async function setAd() {
-      await fetchEmailAd(sessionStorage.getItem('userId'))
+      await fetchEmailAd(userId)
         .then(response => {
           setAds(
             response.map(item => {
@@ -75,7 +76,7 @@ export default function UserAccount1() {
                     <div className="edit-watch-ad">
                       <Link to={{
                         pathname: navigate_edit[item.type],
-                        state: {ad_id: item.id},
+                        state: {ad_id: item.product_id},
                       }}>
                         <span>
                           عدل الاعلان
@@ -89,7 +90,7 @@ export default function UserAccount1() {
                     <div className="edit-watch-ad">
                     <Link to={{
                         pathname: navigate_show[item.type],
-                        state: {ad_id: item.id},
+                        state: {ad_id: item.product_id},
                       }}>
                       <span>شاهد الاعلان</span>
                       </Link>
@@ -107,7 +108,7 @@ export default function UserAccount1() {
         })
     }
     setAd()
-  }, [])
+  }, [userId])
   return (
     <>
       <Navbar />

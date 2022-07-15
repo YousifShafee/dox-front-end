@@ -36,7 +36,7 @@ export default function Page20() {
         .catch(e => console.error(e))
     }
     fetchAd();
-  }, [])
+  }, [location])
   return (
     <>
       <Navbar />

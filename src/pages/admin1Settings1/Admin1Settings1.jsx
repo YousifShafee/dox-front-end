@@ -26,8 +26,13 @@ import {
   Furniture,
   AllWithoutAd,
   IMAGE_URL,
-  Edit
+  Edit,
+  Admin,
+  ViceD,
+  ViceU,
+  Add
 } from "../../config";
+import { useHistory } from "react-router-dom";
 import { useLogin } from "../../components/login/useLogin";
 
 export default function Admin1Settings1() {
@@ -57,13 +62,12 @@ export default function Admin1Settings1() {
   const [background, setBackground] = useState(null);
   const [img, setImg] = useState(null);
   const [img2, setImg2] = useState(null);
-  const { adminId, isAdminLogin } = useLogin()
+  const { userId } = useLogin()
+  const history = useHistory()
 
-  const updateLogo = async (img, pk) => {
+  const updateLogo = async (image, pk) => {
     var request = new FormData()
-    request.append('images', img)
-    if(!isAdminLogin){ return }
-    request.append('user', adminId)
+    request.append('images', image)
     const response = await API.editRequest(IMAGE_URL, pk, Edit, request)
     setLogo({
       img: response.data.images,
@@ -72,7 +76,42 @@ export default function Admin1Settings1() {
     })
   }
 
+  const updateGeneral = async (image) => {
+    var request = new FormData()
+    request.append('images', image)
+    request.append('user', userId)
+    request.append('is_active', true)
+    request.append('category', General)
+    const response = await API.postRequest(IMAGE_URL, Add, request)
+    (response.data)
+    setGeneral(oldArray => [
+      ...oldArray,
+      {
+        img: response.data.images,
+        id: response.data.id,
+        category: response.data.category
+      }
+    ])
+  }
+
   useEffect(() => {
+    let redirect_url = 'admins-login'
+    const mission = sessionStorage.getItem('adminMission')
+    if (mission !== Admin) {
+      if (mission === ViceU) {
+        redirect_url = 'admin-2-settings-1'
+      } else if (mission === ViceD) {
+        redirect_url = 'admin-3-settings-1'
+      }
+      history.push(redirect_url)
+      return
+    }
+    async function fetchLogo() {
+      await fetchImage(Logo)
+        .then(response => {
+          setLogo(response[0])
+        })
+    }
     async function setImages() {
       await fetchImage(AllWithoutAd)
         .then(response => {
@@ -114,12 +153,13 @@ export default function Admin1Settings1() {
           })
         })
     }
+    fetchLogo()
     setImages()
-  }, [])
+  }, [history])
   return (
     <>
       <div className="admin-settings">
-        <AdminNavbar page={"update"} admin1={true} />
+        <AdminNavbar page={"update"} />
 
         <div className="fill-container">
           <div className="box">
@@ -146,11 +186,7 @@ export default function Admin1Settings1() {
                             />
                           ) : (
                             <>
-                              <img
-                                src="./assets/imgs/logo.png"
-                                className="logo"
-                                alt="logo"
-                              />
+                              <img src={logo.img} className="logo" alt="logo" />
                               <div className="dox">
                                 D<span className="text-light">o</span>X
                               </div>
@@ -164,7 +200,6 @@ export default function Admin1Settings1() {
                             type="file"
                             accept="image/*"
                             name="logo"
-                            onChange={(e) => {updateLogo(e.target.files[0], logo.id)}} 
                             hidden
                           />
                           <img
@@ -176,9 +211,7 @@ export default function Admin1Settings1() {
                       </form>
                     </div>
                     <div className="btns">
-                      <button 
-                      
-                      className="btn fs-1 custom-main">احفظ</button>
+                      <button onClick={(e) => { updateLogo(e.target.files[0], logo.id) }} className="btn fs-1 custom-main">احفظ</button>
                     </div>
                   </div>
                   {general.map((image) => (
@@ -189,7 +222,7 @@ export default function Admin1Settings1() {
                       id="background"
                       type="file"
                       accept="image/*"
-                      onChange={(e) => setBackground(e.target.files[0])}
+                      onChange={(e) => updateGeneral(e.target.files[0])}
                       hidden
                     />
                     {background ? (

@@ -6,8 +6,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import Dropdown from "../../components/dropdown/Dropdown";
-import { AD_URL, Edit, FURNITURE_URL } from "../../config";
+import { Edit, FURNITURE_URL } from "../../config";
 import API from "../../API"
 import { useLocation } from "react-router-dom";
 
@@ -56,7 +55,7 @@ export default function Page23() {
       setDepart_name(response.department.name)
       setAttach(response.department.attach)
     })
-    },[])
+    },[location])
   return (
     <>
       <Navbar />

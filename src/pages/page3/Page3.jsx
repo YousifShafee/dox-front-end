@@ -19,7 +19,7 @@ export default function Page3() {
 
   const searchAd = async (event) => {
     event.preventDefault();
-    var { brand, model, lprice, fprice ,transmission_type, body_type, engine_capacity, fuel_type, rental_option, rental_period } = document.forms[0];
+    var { brand, model, lprice, fprice ,transmission_type, body_type, engine_capacity, fuel_type, rental_option, rental_period } = document.forms[1];
     var request = new FormData();
     request.append('brand', brand.value)
     request.append('model', model.value)
@@ -124,7 +124,7 @@ export default function Page3() {
       <div className="container">
         <div className="ads">
           {ads.map((ad) => (
-            <AdCard card={ad} key={ad.id} />
+            <AdCard card={ad} />
           ))}
         </div>
       </div>

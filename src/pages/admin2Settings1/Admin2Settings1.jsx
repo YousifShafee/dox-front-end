@@ -25,10 +25,14 @@ import {
   AllWithoutAd,
   IMAGE_URL,
   Edit,
-  ViceU
+  ViceU,
+  Admin,
+  ViceD,
+  Add
 } from "../../config";
 import { useEffect } from "react";
 import API, { fetchImage } from "../../API";
+import { useHistory } from "react-router-dom";
 import { useLogin } from "../../components/login/useLogin";
 
 export default function Admin2Settings1() {
@@ -36,7 +40,6 @@ export default function Admin2Settings1() {
   const [hideUpdateLogo, setHideUpdateLogo] = useState(false);
   const [hideUpdateMain, setHideUpdateMain] = useState(false);
   const [hideUpdateFav, setHideUpdateFav] = useState(false);
-  const [messages, setMessages] = useState('')
   // Upload imgs
   const [background, setBackground] = useState(null);
   const [img, setImg] = useState(null);
@@ -58,36 +61,49 @@ export default function Admin2Settings1() {
   const [electron, setElectron] = useState([])
   const [featur_furniture, setFeaturFurniture] = useState([])
   const [furniture, setFurniture] = useState([])
-  const { adminId, isAdminLogin, adminMission } = useLogin()
-
-  const checkAdmin = () => {
-    if (!isAdminLogin) {
-      setMessages("يجب تسجيل دخول الأدمن")
-      return false
-    }
-    if (adminMission !== ViceU) {
-      setMessages("هذا المستخدم ليس له الصلاحية")
-      return false
-    }
-    return true
-  }
+  const { userId } = useLogin()
+  const history = useHistory()
 
   const updateLogo = async (img, pk) => {
-    if (checkAdmin()) {
-      var request = new FormData()
-      request.append('images', img)
-      if (!isAdminLogin) { return }
-      request.append('user', adminId)
-      const response = await API.editRequest(IMAGE_URL, pk, Edit, request)
-      setLogo({
+    var request = new FormData()
+    request.append('images', img)
+    const response = await API.editRequest(IMAGE_URL, pk, Edit, request)
+    setLogo({
+      img: response.data.images,
+      id: response.data.id,
+      category: response.data.category
+    })
+  }
+
+  const updateGeneral = async (image) => {
+    var request = new FormData()
+    request.append('images', image)
+    request.append('user', userId)
+    request.append('is_active', true)
+    request.append('category', General)
+    const response = await API.postRequest(IMAGE_URL, Add, request)
+    setGeneral(oldArray => [
+      ...oldArray,
+      {
         img: response.data.images,
         id: response.data.id,
         category: response.data.category
-      })
-    }
+      }
+    ])
   }
 
   useEffect(() => {
+    let redirect_url = "admins-login"
+    const mission = sessionStorage.getItem('adminMission')
+    if (mission !== ViceU) {
+      if (mission === Admin) {
+        redirect_url = 'admin-1-settings-1'
+      } else if (mission === ViceD) {
+        redirect_url = 'admin-3-settings-1'
+      }
+      history.push(redirect_url)
+      return
+    }
     async function setImages() {
       await fetchImage(AllWithoutAd)
         .then(response => {
@@ -129,12 +145,19 @@ export default function Admin2Settings1() {
           })
         })
     }
+    async function fetchLogo() {
+      await fetchImage(Logo)
+        .then(response => {
+          setLogo(response[0])
+        })
+    }
+    fetchLogo()
     setImages()
-  }, [])
+  }, [history])
   return (
     <>
       <div className="admin-settings">
-        <AdminNavbar page={"update"} admin2={true} />
+        <AdminNavbar page={"update"} />
 
         <div className="fill-container">
           <div className="box">
@@ -161,11 +184,7 @@ export default function Admin2Settings1() {
                             />
                           ) : (
                             <>
-                              <img
-                                src="./assets/imgs/logo.png"
-                                className="logo"
-                                alt="logo"
-                              />
+                              <img src={logo.img} className="logo" alt="logo" />
                               <div className="dox">
                                 D<span className="text-light">o</span>X
                               </div>
@@ -178,7 +197,7 @@ export default function Admin2Settings1() {
                             id="logo"
                             type="file"
                             accept="image/*"
-                            onChange={(e) => { updateLogo(e.target.files[0], logo.id) }}
+                            
                             hidden
                           />
                           <img
@@ -190,7 +209,7 @@ export default function Admin2Settings1() {
                       </div>
                     </div>
                     <div className="btns">
-                      <button className="btn fs-1 custom-main">احفظ</button>
+                      <button onClick={(e) => { updateLogo(e.target.files[0], logo.id) }} className="btn fs-1 custom-main">احفظ</button>
                     </div>
                   </div>
                   {general.map((image) => (
@@ -201,7 +220,7 @@ export default function Admin2Settings1() {
                       id="background"
                       type="file"
                       accept="image/*"
-                      onChange={(e) => setBackground(e.target.files[0])}
+                      onChange={(e) => updateGeneral(e.target.files[0])}
                       hidden
                     />
                     {background ? (

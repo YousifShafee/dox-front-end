@@ -19,7 +19,7 @@ export default function Page5() {
 
   const searchAd = async (event) => {
     event.preventDefault();
-    var { bathroom, bedroom, type, fprice, lprice, compound, furnished, area } = document.forms[0];
+    var { bathroom, bedroom, type, fprice, lprice, compound, furnished, area } = document.forms[1];
     var request = new FormData();
     request.append('bathroom', parseInt(bathroom.value))
     request.append('bedroom', parseInt(bedroom.value))
@@ -118,7 +118,7 @@ export default function Page5() {
       <div className="container">
         <div className="ads">
           {ads.map((ad) => (
-            <AdCard card={ad} key={ad.id} />
+            <AdCard card={ad} />
           ))}
         </div>
       </div>

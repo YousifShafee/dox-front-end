@@ -31,7 +31,7 @@ export default function UserSettings() {
 
   const passSubmit = async (event) => {
     event.preventDefault();
-    var { npass, rpass } = document.forms[0];
+    var { npass, rpass } = document.forms[1];
     if (npass.value !== rpass.value) {
       setMessages('كلمة السر المرور الجديدة غير متطابقة')
       return
@@ -54,7 +54,7 @@ export default function UserSettings() {
   }
   useEffect(() => {
     const getData = async () => {
-      await API.getBy(USER_URL, sessionStorage.getItem('userId'))
+      await API.getBy(USER_URL, userId)
         .then(response => {
           setFName(response.first_name)
           setLName(response.last_name)
@@ -62,7 +62,7 @@ export default function UserSettings() {
         })
     }
     getData()
-  }, [])
+  }, [userId])
   return (
     <>
       <Navbar />

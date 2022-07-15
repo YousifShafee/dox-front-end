@@ -7,27 +7,30 @@ import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
 import Dropdown from "../../components/dropdown/Dropdown";
-import { Add, PROPERTIES_SALES_URL } from "../../config";
+import { Add, adNavigate, PROPERTIES_SALES_URL } from "../../config";
 import API from "../../API"
 import { useLogin } from "../../components/login/useLogin";
+import { useHistory } from "react-router-dom";
 
 export default function Page18() {
   const [counter, setCounter] = useState(4096);
   const [img, setImg] = useState(undefined);
   const { isUserLogin, userId } = useLogin()
+  const history = useHistory()
+  const ad_type = "property_sales"
 
   const [messages, setMessages] = useState('');
   const handleSubmit = async (event) => {
     event.preventDefault();
     var request = new FormData();
-    var { ad_name,bedroom,bathroom,type,compound,price,payment,delivery_date,area,delivery_term,description } = document.forms[0];    
+    var { ad_name,bedroom,bathroom,type,compound,price,payment,delivery_date,area,delivery_term,description } = document.forms[1];    
     if (!isUserLogin) {
       setMessages("يجب تسجيل الدخول")
       return
     }
     request.append('user', userId)
     request.append('ad_name', ad_name.value)
-    request.append('ad_type', "property_sales")
+    request.append('ad_type', ad_type)
     request.append('price', price.value)
     request.append('bedroom', bedroom.value)
     request.append('bathroom', bathroom.value)
@@ -41,7 +44,10 @@ export default function Page18() {
     request.append('ad_image', img)
     const response = await API.postRequest(PROPERTIES_SALES_URL, Add, request)
     if (response.status === 201) {
-      setMessages('تم حفظ التعديلات بنجاح')
+      history.push(adNavigate({
+        type: ad_type,
+        id: response.data[0]
+      }))
     } else if (response.status === 404) {
       setMessages('هذا البريد غير موجود')
     } else if (response.status === 400) {

@@ -7,28 +7,20 @@ import { Add, Admin, Edit, NormalU, Search, USER_URL, ViceD, ViceU } from "../..
 import API, { fetchSearchField } from "../../API";
 import { useEffect } from "react";
 import { useLogin } from "../../components/login/useLogin";
+import { useHistory } from "react-router-dom";
 
 export default function Admin1Settings3() {
   // Show & Hide sections
+  const history = useHistory()
   const [hideAddAdmin, setHideAddAdmin] = useState(false);
   const [hideUpdatePass, setHideUpdatePass] = useState(false);
   const [hideDeleteAdmin, setHideDeleteAdmin] = useState(false);
   const [hideDeleteUser, setHideDeleteUser] = useState(false);
-  const {adminId, isAdminLogin, adminMission} = useLogin()
+  const {adminId} = useLogin()
   const [messages, setMessages] = useState('');
   const [viceUser, setViceUser] = useState([]);
   const [normalUser, setNormalUser] = useState([]);
-  const checkAdmin = () => {
-    if(!isAdminLogin){
-      setMessages("يجب تسجيل دخول الأدمن")
-      return
-    }
-    if(adminMission !== Admin){
-      setMessages("هذا المستخدم ليس له الصلاحية")
-    }
-  }
   const handleSubmit = async (event) => {
-    checkAdmin()
     event.preventDefault();
     var { email, pass, fname, lname, phone, gender, mission } = document.forms[0];
     var request = new FormData()
@@ -50,12 +42,10 @@ export default function Admin1Settings3() {
   }
 
   const deleteUser = async (user_id) => {
-    checkAdmin()
     await API.deleteRequest(USER_URL, user_id)
   }
 
   const passSubmit = async (event) => {
-    checkAdmin()
     event.preventDefault();
     var { npass, rpass } = document.forms[1];
     if (npass.value !== rpass.value) {
@@ -76,7 +66,6 @@ export default function Admin1Settings3() {
   }
 
   const searchAd = async (event) => {
-    checkAdmin()
     event.preventDefault();
     var { username } = document.forms[2];
     var request = new FormData();
@@ -117,25 +106,37 @@ export default function Admin1Settings3() {
     </tr>
   }
 
-  useEffect(() => {
-    async function getNormalUser() {
-      await API.getAll(USER_URL)
-        .then(response => {
-          response.map(item => {
-            if (item.mission === NormalU) {
-              setNormalUser(oldArray => [...oldArray, setItem(item)])
-            } else if (item.mission === ViceD || item.mission === ViceU) {
-              setViceUser(oldArray => [...oldArray, setItem(item)])
-            }
-          })
+  const getNormalUser = async () => {
+    await API.getAll(USER_URL)
+      .then(response => {
+        response.map(item => {
+          if (item.mission === NormalU) {
+            setNormalUser(oldArray => [...oldArray, setItem(item)])
+          } else if (item.mission === ViceD || item.mission === ViceU) {
+            setViceUser(oldArray => [...oldArray, setItem(item)])
+          }
         })
-    }
+      })
+  }
+
+  useEffect(() => {
+    let redirect_url = "admins-login"
+    const mission = sessionStorage.getItem('adminMission')
+    if (mission !== Admin) {
+      if (mission === ViceU) {
+        redirect_url = 'admin-2-settings-1'
+      } else if (mission === ViceD) {
+        redirect_url = 'admin-3-settings-1'
+      }
+      history.push(redirect_url)
+      return
+    }    
     getNormalUser()
-  }, [])
+  }, [history])
   return (
     <>
       <div className="admin-settings">
-        <AdminNavbar page={"settings"} admin1={true} />
+        <AdminNavbar page={"settings"} />
         <div className="fill-container">
           <div className="box">
             <div className="body">

@@ -49,12 +49,11 @@ export default function Page20() {
             )
           }
           // setAmenities(extraH)
-          console.log(response.properties.amenities)
         })
         .catch(e => console.error(e))
     }
     fetchAd();
-  }, [])
+  }, [location])
   return (
     <>
       <Navbar />

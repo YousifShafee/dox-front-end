@@ -3,28 +3,29 @@ import "./admin1Settings2.css";
 // Import components
 import AdminNavbar from "../../components/header/AdminNavbar";
 import { useEffect, useState } from "react";
-import API, { fetchAd, fetchSearchField } from "../../API";
-import { Active, AD_URL, Search } from "../../config";
+import API, { fetchImage, fetchSearchField } from "../../API";
+import { Active, Admin, AllWithoutAdLogoGeneral, IMAGE_URL, Search, ViceD, ViceU } from "../../config";
+import { useHistory } from "react-router-dom";
 
 export default function Admin1Settings2() {
   const [ads, setAds] = useState([])
-
+  const history = useHistory()
   const searchAd = async (event) => {
     event.preventDefault();
     var { payment_n } = document.forms[0];
     var request = new FormData();
     request.append('payment_n', payment_n.value)
-    set_res_ads(await fetchSearchField(AD_URL, request))
+    set_res_ads(await fetchSearchField(IMAGE_URL, request))
   }
 
   const deleteAd = async (ad_id) => {
-    await API.deleteRequest(AD_URL, ad_id)
+    await API.deleteRequest(IMAGE_URL, ad_id)
   }
 
   const activeAd = async (ad_id) => {
     var request = new FormData()
     request.append('is_active', true)
-    await API.editRequest(AD_URL, ad_id, Active, request)
+    await API.editRequest(IMAGE_URL, ad_id, Active, request)
   }
 
   const set_res_ads = (response) => {
@@ -70,19 +71,30 @@ export default function Admin1Settings2() {
   }
 
   useEffect(() => {
+    let redirect_url = "admins-login"
+    const mission = sessionStorage.getItem('adminMission')
+    if (mission !== Admin) {
+      if (mission === ViceU) {
+        redirect_url = 'admin-2-settings-1'
+      } else if (mission === ViceD) {
+        redirect_url = 'admin-3-settings-1'
+      }
+      history.push(redirect_url)
+      return
+    }
     async function setAd() {
-      await fetchAd()
+      await fetchImage(AllWithoutAdLogoGeneral, false)
         .then(response => {
           set_res_ads(response)
         })
     }
     setAd()
-  }, [])
+  }, [history])
 
   return (
     <>
       <div className="admin-settings">
-        <AdminNavbar page={"sponsoredAd"} admin1={true} />
+        <AdminNavbar page={"sponsoredAd"} />
         <div className="fill-container">
           <div className="title-input">
             <h2 className="fs-1">الإعلانات المنشورة</h2>

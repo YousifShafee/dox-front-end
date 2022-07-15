@@ -1,56 +1,46 @@
 import "./admin3Settings2.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Import components
 import AdminNavbar from "../../components/header/AdminNavbar";
-import { Edit, USER_URL, ViceD } from "../../config";
+import { Admin, Edit, USER_URL, ViceD, ViceU } from "../../config";
 import API from "../../API";
 import { useLogin } from "../../components/login/useLogin";
+import { useHistory } from "react-router-dom";
 
 export default function Admin3Settings2() {
   // Show & Hide sections
   const [hideUpdatePass, setHideUpdatePass] = useState(false);
-  const [messages, setMessages] = useState('');
-  const { adminMission, isAdminLogin, adminId } = useLogin()
-
-  const checkAdmin = () => {
-    if (!isAdminLogin) {
-      setMessages("يجب تسجيل دخول الأدمن")
-      return false
-    }
-    if (adminMission !== ViceD) {
-      setMessages("هذا المستخدم ليس له الصلاحية")
-      return false
-    }
-    return true
-  }
+  const history = useHistory()
+  const { adminId } = useLogin()
 
   const passSubmit = async (event) => {
-    if (checkAdmin()) {
-      event.preventDefault();
-      var { npass, rpass } = document.forms[1];
-      if (npass.value !== rpass.value) {
-        setMessages('كلمة السر المرور الجديدة غير متطابقة')
-        return
-      }
-      var request = new FormData()
-      request.append('password', npass.value)
-      const response = await API.postRequest(USER_URL + adminId + '/', Edit, request)
-      if (response.status === 200) {
-        setMessages('تم تغيير البيانات بنجاح')
-      } else if (response.status === 400) {
-        setMessages(response.data.data[0])
-        // setIsSubmit(true)
-      } else {
-        setMessages('حدث خطأ أثناء تغيير البيانات')
-      }
+    event.preventDefault();
+    var { npass, rpass } = document.forms[0];
+    if (npass.value !== rpass.value) {
+      return
     }
+    var request = new FormData()
+    request.append('password', npass.value)
+    await API.postRequest(USER_URL + adminId + '/', Edit, request)
   }
-
+  useEffect(() => {
+    let redirect_url = "admins-login"
+    const mission = sessionStorage.getItem('adminMission')
+    if (mission !== ViceD) {
+      if (mission === Admin) {
+        redirect_url = 'admin-1-settings-1'
+      } else if (mission === ViceU) {
+        redirect_url = 'admin-2-settings-1'
+      }
+      history.push(redirect_url)
+      return
+    }
+  }, [history])
   return (
     <>
       <div className="admin-settings">
-        <AdminNavbar page={"settings"} admin3={true} />
+        <AdminNavbar page={"settings"} />
         <div className="fill-container">
           <div className="box">
             <div className="body">

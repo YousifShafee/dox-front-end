@@ -1,9 +1,21 @@
 import "./chatbot.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Logo } from "../../config";
+import { fetchImage } from "../../API";
 
 export default function Chatbot() {
+  const [logo, setLogo] = useState('')
   const [chatbox, setChatbox] = useState(false);
 
+  useEffect(() => {
+    async function fetchLogo() {
+      await fetchImage(Logo)
+        .then(response => {
+          setLogo(response[0])
+        })
+    }
+    fetchLogo()
+  }, [])
   return (
     <div className="container">
       <div className="chatbox">
@@ -14,7 +26,7 @@ export default function Chatbot() {
         >
           <div className="chatbox__header">
             <div className="chatbox__image--header">
-              <img src="./assets/imgs/logo.png" alt="logo" />
+            <img src={logo.img} className="logo" alt="logo" />
             </div>
             <div className="chatbox__content--header">
               <h4 className="chatbox__heading--header">DOX Chatbot</h4>

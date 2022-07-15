@@ -1,11 +1,17 @@
-import { useState } from "react";
-import { Admin, Login, USER_URL, ViceD, ViceU } from "../../config";
-import API from "../../API";
+import { useEffect, useState } from "react";
+import { Admin, Login, Logo, USER_URL, ViceD, ViceU } from "../../config";
+import API, { fetchImage } from "../../API";
 import "./adminsLogin.css";
+import { useHistory } from "react-router-dom";
 
 export default function AdminsLogin() {
+  const [logo, setLogo] = useState('')
   const [messages, setMessages] = useState('');
+  const history = useHistory()
   const setSession = (mission, userEmail, userId) => {
+    sessionStorage.removeItem('adminId');
+    sessionStorage.removeItem('adminEmail');
+    sessionStorage.removeItem('adminMission');
     sessionStorage.setItem('adminMission', mission);
     sessionStorage.setItem('adminEmail', userEmail);
     sessionStorage.setItem('adminId', userId);
@@ -20,7 +26,15 @@ export default function AdminsLogin() {
     const response = await API.postRequest(USER_URL, Login, request)
     if (response.status === 200) {
       setSession(response.data['mission'], response.data['email'], response.data['id']);
-      setMessages('تم تسجيل الدخول بنجاح')
+      let redirect_url = ''
+      if(response.data['mission'] === Admin){
+        redirect_url = 'admin-1-settings-1'
+      } else if(response.data['mission'] === ViceU){
+        redirect_url = 'admin-2-settings-1'
+      } else if(response.data['mission'] === ViceD){
+        redirect_url = 'admin-3-settings-1'
+      }
+      history.push(redirect_url)
     } else if (response.data.data[0] === "Not Active") {
       setMessages('هذا الحساب غير مفعل')
     } else if (response.data.data[0] === "Not Allowed") {
@@ -32,11 +46,20 @@ export default function AdminsLogin() {
       setMessages('حدث خطأ أثناء تسجيل الدخول')
     }
   }
+  useEffect(() => {
+    async function fetchLogo() {
+      await fetchImage(Logo)
+        .then(response => {
+          setLogo(response[0])
+        })
+    }
+    fetchLogo()
+  }, [])
   return (
     <div className="admins-login fs-1">
       <div className="logo-header mt-2 ">
         <div className="logo-box">
-          <img src="./assets/imgs/logo.png" className="logo" alt="logo" />
+        <img src={logo.img} className="logo" alt="logo" />
           <div className="dox">
             D<span className="text-light">o</span>X
           </div>

@@ -6,8 +6,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import Dropdown from "../../components/dropdown/Dropdown";
-import { AD_URL, Edit, PROPERTIES_RENT_URL } from "../../config";
+import { Edit, PROPERTIES_RENT_URL } from "../../config";
 import API from "../../API"
 import { useLocation } from "react-router-dom";
 
@@ -62,7 +61,7 @@ export default function Page18() {
       setCompound(response.properties.compound)
       setArea(response.properties.area)
     })
-    },[])
+    },[location])
   return (
     <>
       <Navbar />

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import { ACCESS_URL, AD_URL, Edit } from "../../config";
+import { ACCESS_URL, Edit } from "../../config";
 import API from "../../API"
 import { useLocation } from "react-router-dom";
 
@@ -51,7 +51,7 @@ export default function Page23() {
       setPrice(response.ad_id.price)
       setType(response.type)
     })
-    },[])
+    },[location])
   return (
     <>
       <Navbar />

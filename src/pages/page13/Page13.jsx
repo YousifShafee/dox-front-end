@@ -1,11 +1,12 @@
 import "./page13.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import API from "../../API";
 import { useState } from "react";
 import { Login, NormalU, USER_URL } from "../../config";
 
 export default function Page13() {
   const [messages, setMessages] = useState('');
+  const history = useHistory()
   const setSession = (token, userEmail, userId) => {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('userEmail', userEmail);
@@ -22,6 +23,9 @@ export default function Page13() {
     if (response.status === 200) {
       setMessages('تم تسجيل الدخول بنجاح')
       setSession(response.data['token'], response.data['email'], response.data['id']);
+      history.push({
+        pathname:"user-account-1",
+      })
     } else if(response.data.data[0] === "Not Active") {
       setMessages('هذا الحساب غير مفعل')
     } else if (response.status === 400) {

@@ -1,11 +1,24 @@
 import "./footer.css";
+import { useEffect, useState } from "react";
+import { fetchImage } from "../../API";
+import { Logo } from "../../config";
 
 export default function Footer() {
+  const [logo, setLogo] = useState('')
+  useEffect(() => {
+    async function fetchLogo() {
+      await fetchImage(Logo)
+        .then(response => {
+          setLogo(response[0])
+        })
+    }
+    fetchLogo()
+  }, [])
   return (
     <div className="footer">
       <div className="container">
         <div className="logo-box">
-          <img src="./assets/imgs/logo.png" className="logo" alt="logo" />
+        <img src={logo.img} className="logo" alt="logo" />
           <div className="dox">
             D<span className="text-light">o</span>X
           </div>

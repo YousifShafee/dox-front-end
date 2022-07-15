@@ -6,8 +6,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import Dropdown from "../../components/dropdown/Dropdown";
-import { AD_URL, Edit, PROPERTIES_SALES_URL } from "../../config";
+import { Edit, PROPERTIES_SALES_URL } from "../../config";
 import API from "../../API"
 import { useLocation } from "react-router-dom";
 
@@ -56,7 +55,6 @@ export default function Page18() {
     }
   }
   useEffect(()=>{
-    console.log(location.state.ad_id)
     API.getBy(PROPERTIES_SALES_URL, location.state.ad_id)
     .then(response => {
       setImg(response.ad_id.ad_image.images)
@@ -72,7 +70,7 @@ export default function Page18() {
       setArea(response.properties.area)
       setDelivery_term(response.delivery_term)
     })
-    },[])
+    },[location])
   return (
     <>
       <Navbar />

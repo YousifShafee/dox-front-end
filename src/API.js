@@ -68,7 +68,8 @@ const getImageItem = (item) => {
 
 export const getAdItem = (item) => {
   return {
-    'id': item.product_id,
+    'product_id': item.product_id,
+    'id': item.id,
     'img': item.ad_image.images,
     'name': item.ad_name,
     'type': item.ad_type,
@@ -77,9 +78,9 @@ export const getAdItem = (item) => {
   }
 }
 
-export const fetchImage = async (category) => {
+export const fetchImage = async (category, active=true) => {
   let images = []
-  await apiSettings.getBy(IMAGE_URL, category)
+  await apiSettings.getBy(IMAGE_URL, category + '/' + active)
     .then(response => {
       images = response.map(item => {
         return getImageItem(item)
@@ -129,7 +130,12 @@ export const fetchSearchAD = async (adPageUrl, request) => {
   await apiSettings.postRequest(adPageUrl, Search, request)
     .then(response => {
       ads = response.data.map(item => {
-        let result = getAdItem(item.ad_id)
+        let result
+        if(adPageUrl === AD_URL){
+          result = getAdItem(item)
+        } else {
+          result = getAdItem(item.ad_id)
+        }
         return { ...result, img: `${BASE_URL}${result.img}` }
       })
     })

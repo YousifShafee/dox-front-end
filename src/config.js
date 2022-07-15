@@ -1,3 +1,5 @@
+import { useHistory } from "react-router-dom";
+
 // API URLS
 const CAR_RENT_URL = 'car/rent/';
 const CAR_SALES_URL = 'car/sales/';
@@ -57,7 +59,26 @@ const EmailAd = "ad/email/"         // get ads for specific account
 // Image action
 const Active = "active/"            // to active slider image and fetuere company image
 
+const adNavigate = (card) => {
+    const navigate_show = {
+        car_sales: "200",
+        car_rent: "201",
+        property_sales: "202",
+        property_rent: "203",
+        mobile: "204",
+        access: "205",
+        midical: "206",
+        electron: "207",
+        furniture: "208",
+    }
+    return {
+        pathname: navigate_show[card.type],
+        state: { ad_id: card.id },
+    }
+}
+
 export {
+    adNavigate,
     AllWithoutAdLogoGeneral,
     Search,
     EmailAd,

@@ -8,12 +8,14 @@ import Footer from "../../components/footer/Footer";
 import { Add, IMAGE_URL } from "../../config";
 import API from "../../API";
 import { useLogin } from "../../components/login/useLogin";
+import { useHistory } from "react-router-dom";
 
 export default function SponsoredAd() {
   const [messages, setMessages] = useState('');
   const [condition, setCondition] = useState(false);
   const [img, setImg] = useState(null);
-  const {isUserLogin, userId} = useLogin()
+  const { isUserLogin, userId } = useLogin()
+  const history = useHistory()
 
   const handleOnChange = () => {
     setCondition(!condition)
@@ -21,19 +23,19 @@ export default function SponsoredAd() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    var { ad_category, ad_position, payment_n } = document.forms[0];
+    var { ad_category, ad_position, payment_n } = document.forms[1];
     var request = new FormData();
-    if(!condition){
+    if (!condition) {
       setMessages("يجب ملئ البيانات المطلوبة")
       return
     }
     let category = ''
-    if(ad_position.value === "feature_company"){
+    if (ad_position.value === "feature_company") {
       category = "featur_" + ad_category.value
     } else {
       category = ad_category.value
     }
-    if(!isUserLogin){
+    if (!isUserLogin) {
       setMessages("يجب تسجيل الدخول")
       return
     }
@@ -41,9 +43,9 @@ export default function SponsoredAd() {
     request.append('category', category)
     request.append('payment_n', payment_n.value)
     request.append('images', img)
-    const response = await API.postRequest(IMAGE_URL , Add, request)
+    const response = await API.postRequest(IMAGE_URL, Add, request)
     if (response.status === 201) {
-      setMessages("تم إرسال البيانات بنجاح وسيتم مراجعتها وفي حال صحة البيانات سيتم عرض الإعلان")
+      history.push("user-account-1")
     } else {
       // setMessages(response.data.data[0])
     }
@@ -56,7 +58,7 @@ export default function SponsoredAd() {
           <div className="box">
             <div className="head fs-1">أضف اعلانك الممول</div>
             <div className="body">
-              <p className="text-center" style={{color: "red"}}>{messages}</p>
+              <p className="text-center" style={{ color: "red" }}>{messages}</p>
               <p className="fs-1 text-center mb-4">
                 اذا كنت تريد الاشتراك في الإعلانات الممولة فاعلم ان ظهور اعلانك
                 سيكون لمدة عام فقط
@@ -80,7 +82,7 @@ export default function SponsoredAd() {
                     <img src="./assets/imgs/mobile-phone.png" alt="mobile" />
                     <img src="./assets/imgs/accessory.png" alt="accessory" />
                     <img src="./assets/imgs/diagnosis_1.png" alt="diagnosis_1" />
-                    <img src="./assets/imgs/electronics.png" alt="electronics"/>
+                    <img src="./assets/imgs/electronics.png" alt="electronics" />
                     <img src="./assets/imgs/furniture.png" alt="furniture" />
                   </div>
                 </div>

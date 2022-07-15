@@ -2,48 +2,30 @@ import "./admin2Settings2.css";
 
 // Import components
 import AdminNavbar from "../../components/header/AdminNavbar";
-import API, { fetchAd, fetchSearchField } from "../../API";
-import { Active, AD_URL, ViceU } from "../../config";
+import API, { fetchImage, fetchSearchField } from "../../API";
+import { Active, Admin, AllWithoutAdLogoGeneral, IMAGE_URL, ViceD, ViceU } from "../../config";
 import { useEffect, useState } from "react";
-import { useLogin } from "../../components/login/useLogin";
+import { useHistory } from "react-router-dom";
 
 export default function Admin2Settings2() {
-  const [messages, setMessages] = useState('')
   const [ads, setAds] = useState([])
-  const { isAdminLogin, adminMission } = useLogin()
-  const checkAdmin = () => {
-    if (!isAdminLogin) {
-      setMessages("يجب تسجيل دخول الأدمن")
-      return false
-    }
-    if (adminMission !== ViceU) {
-      setMessages("هذا المستخدم ليس له الصلاحية")
-      return false
-    }
-    return true
-  }
+  const history = useHistory()
   const deleteAd = async (ad_id) => {
-    if (checkAdmin()) {
-      await API.deleteRequest(AD_URL, ad_id)
-    }
+    await API.deleteRequest(IMAGE_URL, ad_id)
   }
 
   const searchAd = async (event) => {
-    if (checkAdmin()) {
-      event.preventDefault();
-      var { payment_n } = document.forms[0];
-      var request = new FormData();
-      request.append('payment_n', payment_n.value)
-      set_res_ads(await fetchSearchField(AD_URL, request))
-    }
+    event.preventDefault();
+    var { payment_n } = document.forms[0];
+    var request = new FormData();
+    request.append('payment_n', payment_n.value)
+    set_res_ads(await fetchSearchField(IMAGE_URL, request))
   }
 
   const activeAd = async (ad_id) => {
-    if (checkAdmin()) {
-      var request = new FormData()
-      request.append('is_active', true)
-      await API.editRequest(AD_URL, ad_id, Active, request)
-    }
+    var request = new FormData()
+    request.append('is_active', true)
+    await API.editRequest(IMAGE_URL, ad_id, Active, request)
   }
 
   const set_res_ads = (response) => {
@@ -89,18 +71,29 @@ export default function Admin2Settings2() {
   }
 
   useEffect(() => {
+    let redirect_url = "admins-login"
+    const mission = sessionStorage.getItem('adminMission')
+    if (mission !== ViceU) {
+      if (mission === Admin) {
+        redirect_url = 'admin-1-settings-1'
+      } else if (mission === ViceD) {
+        redirect_url = 'admin-3-settings-1'
+      }
+      history.push(redirect_url)
+      return
+    }
     async function setAd() {
-      await fetchAd()
+      await fetchImage(AllWithoutAdLogoGeneral, false)
         .then(response => {
           set_res_ads(response)
         })
     }
     setAd()
-  }, [])
+  }, [history])
   return (
     <>
       <div className="admin-settings">
-        <AdminNavbar page={"sponsoredAd"} admin2={true} />
+        <AdminNavbar page={"sponsoredAd"} />
         <div className="fill-container">
           <div className="title-input">
             <h2 className="fs-1">الإعلانات المنشورة</h2>

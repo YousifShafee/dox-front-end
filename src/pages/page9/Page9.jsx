@@ -18,7 +18,7 @@ export default function Page9() {
 
   const searchAd = async (event) => {
     event.preventDefault();
-    var { fprice, lprice, condition, type, brand } = document.forms[0];
+    var { fprice, lprice, condition, type, brand } = document.forms[1];
     var request = new FormData();
     request.append('lprice', parseInt(lprice.value))
     request.append('fprice', parseInt(fprice.value))
@@ -98,7 +98,7 @@ export default function Page9() {
       <div className="container">
         <div className="ads">
           {ads.map((ad) => (
-            <AdCard card={ad} key={ad.id} />
+            <AdCard card={ad} />
           ))}
         </div>
       </div>

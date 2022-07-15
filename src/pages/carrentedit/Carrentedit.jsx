@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import { AD_URL, CAR_RENT_URL, Edit } from "../../config";
+import { CAR_RENT_URL, Edit } from "../../config";
 import API from "../../API"
 import { useLocation } from "react-router-dom";
 
@@ -71,7 +71,7 @@ export default function Page18() {
       setRentalPeriod(response.rental_period)
       setRentalOption(response.rental_option)
     })
-    },[])
+    },[location])
   return (
     <>
       <Navbar />

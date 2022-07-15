@@ -13,7 +13,6 @@ import { useLocation } from "react-router-dom";
 export default function Page20() {
   const [price, setPrice] = useState('')
   const [images, setImages] = useState({})
-  const [phone, setPhone] = useState('')
   const [ad_name, setAdName] = useState('')
   const [description, setDescription] = useState('')
   const [brand, setBrand] = useState('')
@@ -39,7 +38,6 @@ export default function Page20() {
         .then(response => {
           setPrice(response.ad_id.price)
           setImages({img: response.ad_id.ad_image.images})
-          setPhone(response.ad_id.user.phone)
           setAdName(response.ad_id.ad_name)
           setDescription(response.ad_id.description)
           setBrand(response.car.brand.brand)
@@ -70,7 +68,7 @@ export default function Page20() {
         .catch(e => console.error(e))
     }
     fetchAd();
-  }, [])
+  }, [location])
   return (
     <>
       <Navbar />

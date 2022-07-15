@@ -1,6 +1,6 @@
 import "./page1.css";
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useMemo } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 // Import components
 import Slider from "../../components/slider/Slider";
@@ -8,21 +8,23 @@ import AdCard from "../../components/adCard/AdCard";
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import { General } from '../../config'
-import { fetchImage, fetchAd } from '../../API'
+import { AD_URL, General } from '../../config'
+import { fetchImage, fetchSearchAD } from '../../API'
 
 export default function Page1() {
   const [hideLinks1, setHideLinks1] = useState(false);
   const [hideLinks2, setHideLinks2] = useState(false);
   const [images, setImages] = useState([])
   const [ads, setAds] = useState([])
-
+  
   const getImages = async () => {
     setImages(await fetchImage(General))
   }
-
+  
   const getAds = async () => {
-    setAds(await fetchAd())
+    var request = new FormData();
+    request.append('ad_name', localStorage.getItem("search"))
+    setAds(await fetchSearchAD(AD_URL, request))
   }
 
   useEffect(() => {
@@ -32,7 +34,6 @@ export default function Page1() {
 
   return (
     <>
-      {/* { resData } */}
       <Navbar />
       <div className="products">
         <div className="container">

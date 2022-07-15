@@ -18,7 +18,7 @@ export default function Page2() {
 
   const searchAd = async (event) => {
     event.preventDefault();
-    var { brand, model, lprice, fprice, condition, color, year, kilometer, transmission_type, fuel_type, engine_capacity, offer_type } = document.forms[0];
+    var { brand, model, lprice, fprice, condition, color, year, kilometer, transmission_type, fuel_type, engine_capacity, offer_type } = document.forms[1];
     var request = new FormData();
     request.append('brand', brand.value)
     request.append('model', model.value)
@@ -134,7 +134,7 @@ export default function Page2() {
       <div className="container">
         <div className="ads">
           {ads.map((ad) => (
-            <AdCard card={ad} key={ad.id} />
+            <AdCard card={ad} />
           ))}
         </div>
       </div>

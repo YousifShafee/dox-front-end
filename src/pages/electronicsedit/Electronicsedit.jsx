@@ -6,8 +6,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/header/Navbar";
 import Footer from "../../components/footer/Footer";
 import Chatbot from "../../components/chatbot/Chatbot";
-import Dropdown from "../../components/dropdown/Dropdown";
-import { AD_URL, Edit, ELECTRONIC_URL } from "../../config";
+import { Edit, ELECTRONIC_URL } from "../../config";
 import API from "../../API";
 import { useLocation } from "react-router-dom";
 
@@ -55,7 +54,7 @@ export default function Page23() {
         setBrand(response.brand)
         setType(response.type)
       });
-  }, []);
+  }, [location]);
   return (
     <>
       <Navbar />
