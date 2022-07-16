@@ -73,7 +73,7 @@ const adNavigate = (card) => {
     }
     return {
         pathname: navigate_show[card.type],
-        state: { ad_id: card.id },
+        state: { ad_id: card.product_id },
     }
 }
 
