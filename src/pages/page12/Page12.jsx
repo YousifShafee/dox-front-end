@@ -1,5 +1,5 @@
 import "./page12.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useState } from "react";
 import API from "../../API";
 import { ConfirmAccount, USER_URL } from "../../config";
@@ -7,15 +7,18 @@ import { ConfirmAccount, USER_URL } from "../../config";
 export default function Page12() {
   const [messages, setMessages] = useState('');
   const location = useLocation()
+  const history = useHistory()
   const handleSubmit = async (event) => {
     event.preventDefault();
     var { code } = document.forms[0];
     var request = new FormData()
-    request.append('code', code.value)
+    request.append('active_code', code.value)
     request.append('email', location.state.user_email)
     const response = await API.postRequest(USER_URL, ConfirmAccount, request)
     if (response.status === 200) {
-      setMessages('تم تفعيل الحساب بنجاح')
+      history.push({
+        pathname:"13",
+      })
     } else if (response.status === 400) {
       setMessages(response.data.data[0])
       // setIsSubmit(true)

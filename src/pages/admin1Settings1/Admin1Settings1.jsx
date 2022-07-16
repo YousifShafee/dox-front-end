@@ -83,7 +83,6 @@ export default function Admin1Settings1() {
     request.append('is_active', true)
     request.append('category', General)
     const response = await API.postRequest(IMAGE_URL, Add, request)
-    (response.data)
     setGeneral(oldArray => [
       ...oldArray,
       {

@@ -33,6 +33,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
+    localStorage.setItem("search", search)
     fetchLogo()
   }, [])
   return (
