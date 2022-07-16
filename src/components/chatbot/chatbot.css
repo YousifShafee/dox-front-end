@@ -178,6 +178,8 @@ html {
 .chatbox__send--footer {
   color: white;
   cursor: pointer;
+  background-color: rgba(255, 0, 0, 0.0);
+  border: none;
 }
 
 .chatbox__button button,

@@ -5,6 +5,9 @@ const BASE_URL = 'http://localhost:8000';
 const BASE_API_URL = `${BASE_URL}/main/`;
 const API_FORMAT = '?format=json'
 
+const CHATBOT_URL = 'http://localhost:3001/';
+const CHATBOT_MESSAGE_URL = `api/messages/`;
+
 const apiSettings = {
   getAll: async (URL) => {
     const endpoint = `${BASE_API_URL}${URL}${API_FORMAT}`
@@ -78,7 +81,7 @@ export const getAdItem = (item) => {
   }
 }
 
-export const fetchImage = async (category, active=true) => {
+export const fetchImage = async (category, active = true) => {
   let images = []
   await apiSettings.getBy(IMAGE_URL, category + '/' + active)
     .then(response => {
@@ -131,7 +134,7 @@ export const fetchSearchAD = async (adPageUrl, request) => {
     .then(response => {
       ads = response.data.map(item => {
         let result
-        if(adPageUrl === AD_URL){
+        if (adPageUrl === AD_URL) {
           result = getAdItem(item)
         } else {
           result = getAdItem(item.ad_id)
@@ -154,6 +157,32 @@ export const fetchSearchField = async (adPageUrl, request) => {
     })
     .catch(e => console.error(e))
   return ads
+}
+
+export const chatbot_talk = async (message) => {
+  const endpoint = `${CHATBOT_URL}${CHATBOT_MESSAGE_URL}`;
+  return await axios.post(endpoint,
+    {
+      "type": "message",
+      "text": message,
+      "channel": "websocket",
+      "user": "214124-1414-1111"
+    },
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        'Access-Control-Allow-Credentials': true,
+        withCredentials: true,
+        "Content-Type": "application/json"
+      }
+    },
+  )
+    .then(res => {
+      return { 'data': res.data[0], 'status': res.status }
+    })
+    .catch(error => {
+      return { 'data': error.response, 'status': error.response.status }
+    })
 }
 
 export default apiSettings;
