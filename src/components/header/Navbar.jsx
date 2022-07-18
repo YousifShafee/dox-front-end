@@ -33,7 +33,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    localStorage.setItem("search", search)
+    setSearch(localStorage.getItem("search"))
     fetchLogo()
   }, [])
   return (
@@ -87,14 +87,16 @@ export default function Navbar() {
                 </button>
               </div>
               <div className="add-box">
-                <button className="btn btn-add btn-auth  text-light  ">
-                  <span className="fs-1">حسابى</span>
-                  <img
-                    className="add-icon w-22"
-                    src="./assets/imgs/person.png"
-                    alt="add"
-                  />
-                </button>
+                <Link to='user-account-1'>
+                  <button className="btn btn-add btn-auth  text-light  ">
+                    <span className="fs-1">حسابى</span>
+                    <img
+                      className="add-icon w-22"
+                      src="./assets/imgs/person.png"
+                      alt="add"
+                    />
+                  </button>
+                </Link>
               </div>
             </>
           ) : (

@@ -40,7 +40,7 @@ export default function Page23() {
     if (response.status === 201) {
       history.push(adNavigate({
         type: ad_type,
-        id: response.data[0]
+        product_id: response.data[0]
       }))
     } else if (response.status === 404) {
       setMessages('هذا البريد غير موجود')
